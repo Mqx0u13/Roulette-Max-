@@ -15,122 +15,656 @@
             --warning-yellow: #facc15;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: 'Impact', 'Arial Black', sans-serif; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: 'Impact', 'Arial Black', sans-serif;
+        }
 
-        body { background-color: var(--bg-dark); color: #ffffff; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+        body {
+            background-color: var(--bg-dark);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
-        /* --- EN-TÊTE --- */
-        header { background: linear-gradient(to bottom, #111, #000); padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #222; height: 70px; flex-shrink: 0; }
-        .brand-logo { display: flex; flex-direction: column; line-height: 1.1; }
-        .logo-e { color: var(--text-gold); font-size: 1.5rem; font-family: 'Times New Roman', serif; font-weight: bold; }
-        .brand-name { font-size: 1rem; letter-spacing: 2px; }
-        .croupier-box { text-align: center; font-family: Arial, sans-serif; font-size: 0.9rem; }
-        .croupier-name { color: #fff; font-size: 1.1rem; }
+        /* --- EN-TÊTE COMPLET --- */
+        header {
+            background: linear-gradient(to bottom, #111, #000);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #222;
+            height: 80px;
+            flex-shrink: 0;
+        }
 
-        /* --- LAYOUT --- */
-        .main-layout { display: flex; flex: 1; overflow: hidden; }
-        .left-sidebar { width: 30%; background-color: var(--panel-texture); border-right: 3px solid #2d2d30; padding: 10px; display: flex; flex-direction: column; }
-        .current-number-box { background: #111; border: 3px solid #3a3a40; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 5rem; font-weight: bold; margin-bottom: 10px; }
-        .history-rows-container { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 4px; }
-        .history-line { display: grid; grid-template-columns: 1fr 1fr; width: 100%; text-align: center; font-size: 2rem; }
-        .zero-line { display: block; color: var(--casino-green); }
+        .brand-logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
 
-        .right-content { width: 70%; display: flex; flex-direction: column; overflow: hidden; }
+        .logo-e {
+            color: var(--text-gold);
+            font-size: 1.8rem;
+            font-family: 'Times New Roman', serif;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+        }
 
-        /* --- CHAUDS & FROIDS --- */
-        .hot-cold-section { padding: 10px; background: #0b0d13; display: flex; flex-direction: column; gap: 5px; }
-        .hc-row { display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
-        .hc-numbers { display: flex; gap: 5px; }
-        .hc-ball { width: 35px; height: 35px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; border: 1px solid #555; }
+        .brand-name {
+            font-size: 1.1rem;
+            letter-spacing: 3px;
+            font-weight: bold;
+            color: #fff;
+        }
 
-        /* --- STATS --- */
-        .stats-section { padding: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .bar-wrapper { height: 30px; display: flex; border: 1px solid #333; background: #000; }
-        .bar-segment { display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: width 0.3s; }
+        .sub-brand {
+            font-size: 0.85rem;
+            font-family: Arial, sans-serif;
+            color: var(--text-gold);
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
 
-        /* --- KEYPAD --- */
-        .embedded-keypad { flex: 1; padding: 10px; overflow-y: auto; }
-        .keypad-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .key-btn { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; border-radius: 4px; cursor: pointer; }
+        .croupier-box {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            color: #ddd;
+            font-weight: bold;
+        }
+
+        .croupier-name {
+            color: #fff;
+            font-family: 'Impact', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 1.5px;
+        }
+
+        /* --- CONFIGURATION PANNEAUX --- */
+        .main-layout {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* --- HISTORIQUE (GAUCHE) --- */
+        .left-sidebar {
+            width: 30%;
+            background-color: var(--panel-texture);
+            border-right: 3px solid #2d2d30;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .current-number-box {
+            background-color: #111317;
+            border: 3px solid #3a3a40;
+            height: 110px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            flex-shrink: 0;
+            font-size: 5.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .history-rows-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .history-line {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            width: 100%;
+            align-items: center;
+        }
+
+        .history-line.zero-line {
+            display: block;
+            text-align: center;
+        }
+
+        .hist-cell {
+            font-size: 2.3rem;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .hist-cell.empty {
+            visibility: hidden;
+        }
+
+        /* --- VISUEL & TAPIS SAISIE (DROITE) --- */
+        .right-content {
+            width: 70%;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- SECTION CHAUDS & FROIDS --- */
+        .hot-cold-section {
+            padding: 10px 15px;
+            background: #0b0d13;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            border-bottom: 1px solid #1f2937;
+            flex-shrink: 0;
+        }
+
+        .hc-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 1.2rem;
+        }
+
+        .hc-label {
+            font-size: 1.4rem;
+            width: 30px;
+            text-align: center;
+        }
+
+        .hc-numbers {
+            display: flex;
+            gap: 8px;
+        }
+
+        .hc-ball {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+        }
+
+        /* --- STATISTIQUES --- */
+        .stats-section {
+            background-color: #0b0d13;
+            padding: 10px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            flex-shrink: 0;
+            border-bottom: 2px solid #222;
+        }
+
+        .stat-row-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+            color: #d1d5db;
+            padding: 0 4px;
+            margin-bottom: 2px;
+        }
+
+        .bar-wrapper {
+            height: 34px;
+            border: 2px solid #222;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            background-color: #111;
+        }
+
+        .bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            transition: width 0.4s ease;
+        }
+
+        .bar-separator {
+            width: 8px;
+            background-color: #13b467;
+            height: 100%;
+            box-shadow: 0 0 10px #13b467;
+            transition: width 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* --- GRILLE DE SAISIE --- */
+        .embedded-keypad {
+            flex: 1;
+            background-color: #0d0f14;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .key-btn {
+            height: 44px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .key-btn:active {
+            transform: scale(0.95);
+        }
+
+        .keypad-controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .ctrl-btn {
+            height: 40px;
+            font-family: Arial, sans-serif;
+            font-size: 0.95rem;
+            font-weight: bold;
+            color: #fff;
+            border-radius: 6px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* --- BLOC RÈGLES --- */
+        .table-rules-container {
+            background-color: #11141a;
+            border: 1px solid #222;
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 4px;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        .rules-title {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--text-gold);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .rules-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            font-size: 0.75rem;
+            color: #bbb;
+        }
+
+        .rules-item span {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* --- PREVENTON --- */
+        .prevention-banner {
+            background-color: var(--warning-yellow);
+            color: #000;
+            padding: 6px 12px;
+            font-family: Arial, sans-serif;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-align: center;
+            border-top: 2px solid #b45309;
+            flex-shrink: 0;
+            line-height: 1.3;
+        }
+
+        /* Couleurs */
+        .c-red { color: var(--casino-red); }
+        .c-black { color: #ffffff; }
+        .c-green { color: var(--casino-green); }
         
-        /* --- RÈGLES & PRÉVENTION --- */
-        .rules-box { font-family: Arial, sans-serif; font-size: 0.8rem; color: #ccc; margin: 10px 0; line-height: 1.4; text-align: center; }
-        .prevention-banner { background-color: var(--warning-yellow); color: #000; padding: 5px; font-size: 0.7rem; font-weight: bold; text-align: center; }
-        
-        .bg-red { background: #d61c1c; } .bg-black { background: #17181c; } .bg-green { background: #0b9351; }
+        .bg-red { background: linear-gradient(to bottom, #e52d2d, #a31515); }
+        .bg-black { background: linear-gradient(to bottom, #2c2d30, #17181c); }
+        .bg-green { background: linear-gradient(to bottom, #13b467, #0b7340); }
+        .bg-orange { background: linear-gradient(to bottom, #f59e0b, #d97706); }
+        .bg-blue { background: linear-gradient(to bottom, #3b82f6, #1d4ed8); }
+        .bg-dark-gray { background: #374151; }
+        .bg-dark-red { background: #991b1b; }
     </style>
 </head>
 <body>
 
+    <!-- EN-TÊTE CORRIGÉ -->
     <header>
-        <div class="brand-logo"><span class="logo-e">E</span><span class="brand-name">CASINO COMPAN</span></div>
-        <div class="croupier-box">CROUPIER<br><span class="croupier-name">B. ETHAN</span></div>
+        <div class="brand-logo">
+            <span class="logo-e">E</span>
+            <span class="brand-name">CASINO COMPAN</span>
+            <span class="sub-brand">Ethan Casino</span>
+        </div>
+        <div class="croupier-box">
+            <span>CROUPIER :</span><br>
+            <span class="croupier-name">B. ETHAN</span>
+        </div>
+        <div style="width: 140px;"></div> <!-- Équilibre visuel -->
     </header>
 
     <div class="main-layout">
+        
+        <!-- SIDEBAR GAUCHE : HISTORIQUE COMPLET COMPATIBLE ZÉRO -->
         <div class="left-sidebar">
             <div class="current-number-box" id="mainDisplayBox">-</div>
-            <div class="history-rows-container" id="historyContainer"></div>
+            <div class="history-rows-container" id="historyContainer">
+                <!-- Saisie dynamique par JS -->
+            </div>
         </div>
 
+        <!-- CÔTÉ DROIT -->
         <div class="right-content">
-            <!-- CHAUDS & FROIDS -->
+            
+            <!-- SECTION CHAUDS & FROIDS DYNAMIQUE -->
             <div class="hot-cold-section">
-                <div class="hc-row"><span>🔥</span><div class="hc-numbers" id="hotNums"></div></div>
-                <div class="hc-row"><span>❄️</span><div class="hc-numbers" id="coldNums"></div></div>
-            </div>
-
-            <!-- STATS -->
-            <div class="stats-section">
-                <div class="bar-wrapper"><div class="bar-segment bg-red" id="bar-red" style="width:45%"></div><div class="bar-segment bg-green" id="bar-zero" style="width:10%">0%</div><div class="bar-segment bg-black" id="bar-black" style="width:45%"></div></div>
-            </div>
-
-            <div class="embedded-keypad">
-                <div class="keypad-grid" id="gridButtons"></div>
-                <div class="rules-box">
-                    <strong>RÈGLES DE LA ROULETTE - TABLE 1</strong><br>
-                    Mise min: 2€ | Plein max: 40€ | Cheval max: 80€<br>
-                    Transversale: 120€ | Carré: 160€<br>
-                    Colonne/Douzaine: 480€ | Chances simples: 720€
+                <div class="hc-row">
+                    <span class="hc-label">🔥</span>
+                    <div class="hc-numbers" id="hotNums"></div>
+                </div>
+                <div class="hc-row">
+                    <span class="hc-label">❄️</span>
+                    <div class="hc-numbers" id="coldNums"></div>
                 </div>
             </div>
-            
-            <div class="prevention-banner">⚠️ JEUX D'ARGENT : RISQUES D'ADDICTION ET PERTES FINANCIÈRES. JOUEURS-INFO-SERVICE.FR</div>
+
+            <!-- SECTION STATISTIQUES REFAITE (ROUGE/NOIR & PAIR/IMPAIR) -->
+            <div class="stats-section">
+                <div>
+                    <div class="stat-row-label">
+                        <span>ROUGE</span>
+                        <span>ZERO</span>
+                        <span>NOIR</span>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-segment bg-red" id="bar-red" style="width: 46%;">0%</div>
+                        <div class="bar-separator" id="sep-zero-1" style="width: 8px;"></div>
+                        <div class="bar-segment bg-black" id="bar-black" style="width: 46%;">0%</div>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="stat-row-label">
+                        <span>IMPAIR</span>
+                        <span>ZERO</span>
+                        <span>PAIR</span>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-segment bg-orange" id="bar-odd" style="width: 46%;">0%</div>
+                        <div class="bar-separator" id="sep-zero-2" style="width: 8px;"></div>
+                        <div class="bar-segment bg-blue" id="bar-even" style="width: 46%;">0%</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GRILLE DE SAISIE FIXE -->
+            <div class="embedded-keypad">
+                <div class="keypad-grid" id="gridButtons">
+                    <!-- Généré par JS -->
+                </div>
+                
+                <div class="keypad-controls">
+                    <button class="ctrl-btn bg-dark-gray" onclick="undoLast()">Retour (Undo)</button>
+                    <button class="ctrl-btn bg-dark-red" onclick="clearAll()">Effacer Tout</button>
+                </div>
+                
+                <!-- ZONE RÈGLES ET LIMITES DE LA TABLE 1 -->
+                <div class="table-rules-container">
+                    <div class="rules-title">RÈGLES DE LA ROULETTE — TABLE 1</div>
+                    <div class="rules-grid">
+                        <div class="rules-item">Mise Min : <span>2€</span></div>
+                        <div class="rules-item">Plein Max : <span>40€</span></div>
+                        <div class="rules-item">Cheval Max : <span>80€</span></div>
+                        <div class="rules-item">Transversale : <span>120€</span></div>
+                        <div class="rules-item">Carré : <span>160€</span></div>
+                        <div class="rules-item">Col./Douz. : <span>480€</span></div>
+                        <div class="rules-item" style="grid-column: span 3; margin-top: 2px;">Chances simples : <span>720€</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BANDEAU JAUNE DE PRÉVENTION -->
+            <div class="prevention-banner">
+                ⚠️ LES JEUX D'ARGENT ET DE HASARD PEUVENT ÊTRE DANGEREUX : PERTES D'ARGENT, CONFLITS FAMILIAUX, ADDICTION... RETROUVEZ NOS CONSEILS SUR JOUEURS-INFO-SERVICE.FR (09 74 75 13 13 - APPEL NON SURTAXÉ)
+            </div>
+
         </div>
     </div>
 
     <script>
-        let history = [];
         const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-        
-        function getNumberColor(num) { return num === 0 ? 'bg-green' : (redNumbers.includes(num) ? 'bg-red' : 'bg-black'); }
+        let history = [];
 
-        function selectNumber(num) { history.push(num); updateAll(); }
-        function undoLast() { history.pop(); updateAll(); }
+        function getNumberColor(num) {
+            if (num === 0) return 'green';
+            return redNumbers.includes(num) ? 'red' : 'black';
+        }
 
-        function updateAll() {
-            // Mise à jour Affichage Principal
-            const last = history[history.length - 1] || '-';
-            document.getElementById('mainDisplayBox').textContent = last;
+        function getButtonClass(num) {
+            if (num === 0) return 'bg-green';
+            return redNumbers.includes(num) ? 'bg-red' : 'bg-black';
+        }
+
+        function init() {
+            buildEmbeddedGrid();
+            updateDashboard();
+        }
+
+        function buildEmbeddedGrid() {
+            const grid = document.getElementById('gridButtons');
+            grid.innerHTML = '';
             
-            // Mise à jour Chauds/Froids
-            const counts = {}; history.forEach(n => counts[n] = (counts[n] || 0) + 1);
-            const sorted = Object.keys(counts).sort((a,b) => counts[b] - counts[a]);
-            document.getElementById('hotNums').innerHTML = sorted.slice(0,4).map(n => `<div class="hc-ball ${getNumberColor(parseInt(n))}">${n}</div>`).join('');
-            document.getElementById('coldNums').innerHTML = sorted.slice(-4).reverse().map(n => `<div class="hc-ball ${getNumberColor(parseInt(n))}">${n}</div>`).join('');
+            const btnZero = document.createElement('div');
+            btnZero.className = 'key-btn bg-green';
+            btnZero.textContent = '0';
+            btnZero.onclick = () => selectNumber(0);
+            grid.appendChild(btnZero);
 
-            // Grille Saisie
-            const grid = document.getElementById('gridButtons'); grid.innerHTML = '';
-            [0, ...Array.from({length:36}, (_,i) => i+1)].forEach(n => {
+            for(let i = 1; i <= 36; i++) {
                 const btn = document.createElement('div');
-                btn.className = `key-btn ${getNumberColor(n)}`;
-                btn.textContent = n;
-                btn.onclick = () => selectNumber(n);
+                btn.className = `key-btn ${getButtonClass(i)}`;
+                btn.textContent = i;
+                btn.onclick = () => selectNumber(i);
                 grid.appendChild(btn);
+            }
+        }
+
+        function selectNumber(num) {
+            history.push(num);
+            updateDashboard();
+        }
+
+        function undoLast() {
+            history.pop();
+            updateDashboard();
+        }
+
+        function clearAll() {
+            history = [];
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            const mainBox = document.getElementById('mainDisplayBox');
+            
+            if (history.length > 0) {
+                const last = history[history.length - 1];
+                mainBox.textContent = last;
+                
+                if(getNumberColor(last) === 'red') mainBox.style.color = 'var(--casino-red)';
+                else if(getNumberColor(last) === 'black') mainBox.style.color = '#ffffff';
+                else mainBox.style.color = 'var(--casino-green)';
+            } else {
+                mainBox.textContent = '-';
+                mainBox.style.color = '#ffffff';
+            }
+
+            renderSplitHistory();
+            calculateStats();
+            updateHotCold();
+        }
+
+        function renderSplitHistory() {
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = '';
+
+            const recent = [...history].reverse().slice(0, 10);
+
+            recent.forEach(num => {
+                if (num === 0) {
+                    container.innerHTML += `
+                        <div class="history-line zero-line">
+                            <div class="hist-cell c-green">${num}</div>
+                        </div>`;
+                } else {
+                    const color = getNumberColor(num);
+                    if (color === 'red') {
+                        container.innerHTML += `
+                            <div class="history-line">
+                                <div class="hist-cell c-red">${num}</div>
+                                <div class="hist-cell empty">-</div>
+                            </div>`;
+                    } else {
+                        container.innerHTML += `
+                            <div class="history-line">
+                                <div class="hist-cell empty">-</div>
+                                <div class="hist-cell c-black">${num}</div>
+                            </div>`;
+                    }
+                }
             });
         }
-        
-        window.onload = updateAll;
+
+        function updateHotCold() {
+            const hotContainer = document.getElementById('hotNums');
+            const coldContainer = document.getElementById('coldNums');
+            
+            if (history.length === 0) {
+                hotContainer.innerHTML = '<span style="color:#555; font-size:0.9rem; font-family:sans-serif;">En attente...</span>';
+                coldContainer.innerHTML = '<span style="color:#555; font-size:0.9rem; font-family:sans-serif;">En attente...</span>';
+                return;
+            }
+
+            // Fréquence de tous les nombres possibles (0 à 36)
+            const frequencies = Array.from({ length: 37 }, (_, i) => ({ num: i, count: 0 }));
+            history.forEach(num => { frequencies[num].count++; });
+
+            // On ne prend que les numéros sortis au moins une fois pour le classement complet
+            const activeSort = [...frequencies].filter(f => f.count > 0);
+            
+            // Tri décroissant pour les chauds
+            const hotSorted = [...activeSort].sort((a, b) => b.count - a.count || b.num - a.num);
+            // Tri croissant pour les froids
+            const coldSorted = [...activeSort].sort((a, b) => a.count - b.count || a.num - b.num);
+
+            hotContainer.innerHTML = hotSorted.slice(0, 4).map(f => 
+                `<div class="hc-ball ${getButtonClass(f.num)}">${f.num}</div>`
+            ).join('');
+
+            coldContainer.innerHTML = coldSorted.slice(0, 4).map(f => 
+                `<div class="hc-ball ${getButtonClass(f.num)}">${f.num}</div>`
+            ).join('');
+        }
+
+        function calculateStats() {
+            const total = history.length;
+            
+            if (total === 0) {
+                document.getElementById('bar-red').style.width = "46%"; document.getElementById('bar-red').textContent = "0%";
+                document.getElementById('bar-black').style.width = "46%"; document.getElementById('bar-black').textContent = "0%";
+                document.getElementById('sep-zero-1').style.width = "8px"; document.getElementById('sep-zero-1').textContent = "";
+                
+                document.getElementById('bar-odd').style.width = "46%"; document.getElementById('bar-odd').textContent = "0%";
+                document.getElementById('bar-even').style.width = "46%"; document.getElementById('bar-even').textContent = "0%";
+                document.getElementById('sep-zero-2').style.width = "8px"; document.getElementById('sep-zero-2').textContent = "";
+                return;
+            }
+
+            let red = 0, black = 0, zero = 0, odd = 0, even = 0;
+
+            history.forEach(num => {
+                if (num === 0) {
+                    zero++;
+                } else {
+                    if (redNumbers.includes(num)) red++;
+                    else black++;
+
+                    if (num % 2 !== 0) odd++;
+                    else even++;
+                }
+            });
+
+            const pRed = Math.round((red / total) * 100);
+            const pBlack = Math.round((black / total) * 100);
+            const pZero = Math.round((zero / total) * 100);
+            const pOdd = Math.round((odd / total) * 100);
+            const pEven = Math.round((even / total) * 100);
+
+            document.getElementById('bar-red').style.width = pRed > 0 ? `${pRed}%` : '0%';
+            document.getElementById('bar-red').textContent = `${pRed}%`;
+            document.getElementById('bar-black').style.width = pBlack > 0 ? `${pBlack}%` : '0%';
+            document.getElementById('bar-black').textContent = `${pBlack}%`;
+            
+            const sep1 = document.getElementById('sep-zero-1');
+            if (pZero > 0) { sep1.style.width = `${pZero}%`; sep1.textContent = `${pZero}%`; } 
+            else { sep1.style.width = '8px'; sep1.textContent = ''; }
+
+            document.getElementById('bar-odd').style.width = pOdd > 0 ? `${pOdd}%` : '0%';
+            document.getElementById('bar-odd').textContent = `${pOdd}%`;
+            document.getElementById('bar-even').style.width = pEven > 0 ? `${pEven}%` : '0%';
+            document.getElementById('bar-even').textContent = `${pEven}%`;
+
+            const sep2 = document.getElementById('sep-zero-2');
+            if (pZero > 0) { sep2.style.width = `${pZero}%`; sep2.textContent = `${pZero}%`; } 
+            else { sep2.style.width = '8px'; sep2.textContent = ''; }
+        }
+
+        window.onload = init;
     </script>
 </body>
 </html>
