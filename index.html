@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ethan Casino - Live Board</title>
+    <title>Casino Compan - Live Board</title>
     <style>
         :root {
             --bg-dark: #07090e;
@@ -12,6 +12,8 @@
             --casino-black: #17181c;
             --casino-green: #0b9351;
             --text-gold: #d4af37;
+            --warning-yellow: #facc15;
+            --warning-bg: #1e1b4b;
         }
 
         * {
@@ -32,7 +34,7 @@
             overflow: hidden;
         }
 
-        /* --- EN-TÊTE PERSONNALISÉ --- */
+        /* --- EN-TÊTE CONFIGURATION PRO --- */
         header {
             background: linear-gradient(to bottom, #111, #000);
             padding: 12px 20px;
@@ -40,7 +42,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #222;
-            height: 75px;
+            height: 80px;
             flex-shrink: 0;
         }
 
@@ -50,18 +52,43 @@
             line-height: 1.1;
         }
 
-        .logo-b {
+        .logo-e {
             color: var(--text-gold);
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-family: 'Times New Roman', serif;
             font-weight: bold;
+            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
         }
 
         .brand-name {
-            font-size: 1.3rem;
-            letter-spacing: 4px;
+            font-size: 1.1rem;
+            letter-spacing: 3px;
             font-weight: bold;
             color: #fff;
+        }
+
+        .sub-brand {
+            font-size: 0.85rem;
+            font-family: Arial, sans-serif;
+            color: var(--text-gold);
+            letter-spacing: 1px;
+            margin-top: 2px;
+        }
+
+        .croupier-box {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
+            color: #ddd;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .croupier-name {
+            color: #fff;
+            font-family: 'Impact', sans-serif;
+            font-size: 1.3rem;
+            letter-spacing: 1.5px;
         }
 
         .limits-box {
@@ -120,20 +147,30 @@
             overflow: hidden;
         }
 
-        .history-columns {
+        .history-rows-container {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .history-line {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            flex: 1;
-            overflow-y: auto;
-            align-content: start;
-            row-gap: 6px;
+            width: 100%;
+            align-items: center;
+        }
+
+        .history-line.zero-line {
+            display: block;
+            text-align: center;
         }
 
         .hist-cell {
             font-size: 2.5rem;
             font-weight: bold;
             text-align: center;
-            width: 100%;
             line-height: 1;
         }
 
@@ -149,9 +186,8 @@
             overflow: hidden;
         }
 
-        /* Le Cylindre horizontal du haut */
         .roulette-ribbon-container {
-            height: 160px;
+            height: 150px;
             background: #000;
             border-bottom: 3px solid #2d2d30;
             position: relative;
@@ -169,13 +205,13 @@
         }
 
         .ribbon-pocket {
-            width: 110px;
-            height: 110px;
+            width: 100px;
+            height: 100px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: bold;
             border: 2px solid #333;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
@@ -189,15 +225,15 @@
         .ball-overlay {
             position: absolute;
             bottom: 15px;
-            width: 30px;
-            height: 30px;
+            width: 28px;
+            height: 28px;
             background: radial-gradient(circle at 30% 30%, #fff, #aaa);
             border-radius: 50%;
             box-shadow: 0 4px 10px rgba(0,0,0,0.9), 0 0 6px #fff;
             z-index: 10;
         }
 
-        /* Panneau Statistiques */
+        /* Statistiques */
         .stats-section {
             background-color: #0b0d13;
             padding: 12px;
@@ -224,6 +260,7 @@
             display: flex;
             overflow: hidden;
             position: relative;
+            background-color: #111;
         }
 
         .bar-segment {
@@ -231,19 +268,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: bold;
             transition: width 0.5s ease;
         }
 
         .bar-separator {
-            width: 6px;
-            background-color: #00ff00;
+            width: 8px;
+            background-color: #13b467;
             height: 100%;
-            box-shadow: 0 0 10px #00ff00;
+            box-shadow: 0 0 10px #13b467;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: white;
         }
 
-        /* --- GRILLE DE SAISIE FIXE EN BAS --- */
+        /* --- GRILLE DE SAISIE FIXE --- */
         .embedded-keypad {
             flex: 1;
             background-color: #0d0f14;
@@ -257,13 +301,13 @@
 
         .keypad-grid {
             display: grid;
-            grid-template-columns: repeat(7, 1fr); /* 7 colonnes pour rester compact en hauteur */
+            grid-template-columns: repeat(7, 1fr);
             gap: 6px;
         }
 
         .key-btn {
-            height: 50px;
-            font-size: 1.4rem;
+            height: 46px;
+            font-size: 1.3rem;
             font-weight: bold;
             color: #fff;
             border: 2px solid rgba(255,255,255,0.05);
@@ -287,7 +331,7 @@
         }
 
         .ctrl-btn {
-            height: 45px;
+            height: 42px;
             font-family: Arial, sans-serif;
             font-size: 1rem;
             font-weight: bold;
@@ -298,6 +342,32 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+        }
+
+        /* Infos Règles */
+        .table-info-text {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #888;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Bandeau de prévention légal style officiel */
+        .prevention-banner {
+            background-color: var(--warning-yellow);
+            color: #000;
+            padding: 6px 12px;
+            font-family: Arial, sans-serif;
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-align: center;
+            border-top: 2px solid #b45309;
+            flex-shrink: 0;
+            line-height: 1.3;
         }
 
         /* Couleurs Thèmes */
@@ -316,31 +386,33 @@
 </head>
 <body>
 
-    <!-- HEADER STYLE CASINO ETHAN -->
+    <!-- HEADER STYLE CASINO COMPAN / ETHAN CASINO -->
     <header>
         <div class="brand-logo">
-            <span class="logo-b">E</span>
-            <span class="brand-name">ETHAN CASINO</span>
+            <span class="logo-e">E</span>
+            <span class="brand-name">CASINO COMPAN</span>
+            <span class="sub-brand">Ethan Casino</span>
+        </div>
+        <div class="croupier-box">
+            <span>CROUPIER :</span><br>
+            <span class="croupier-name">B. ETHAN</span>
         </div>
         <div class="limits-box">
             MISE MIN: <span>5€</span><br>
             MISE MAX: <span>100€</span>
         </div>
-        <div class="limits-box" style="text-align: right; padding-left: 20px;">
-            <br><span>AR 32</span>
-        </div>
     </header>
 
     <div class="main-layout">
         
-        <!-- SIDEBAR GAUCHE : HISTORIQUE STRICT 2 COLONNES -->
+        <!-- SIDEBAR GAUCHE : HISTORIQUE AVEC ZÉRO CENTRÉ -->
         <div class="left-sidebar">
             <div class="current-number-box" id="mainDisplayBox">
                 <span id="lastNumberOut">-</span>
             </div>
             <div class="history-grid-container">
-                <div class="history-columns" id="historyContainer">
-                    <!-- Généré par JS -->
+                <div class="history-rows-container" id="historyContainer">
+                    <!-- Les lignes s'insèrent ici par JS -->
                 </div>
             </div>
         </div>
@@ -358,9 +430,9 @@
                 <div class="ball-overlay"></div>
             </div>
 
-            <!-- Section Graphiques Statistiques -->
+            <!-- Section Graphiques Statistiques Intégrant le Zéro -->
             <div class="stats-section">
-                <!-- Rouge / Noir -->
+                <!-- Rouge / Zéro / Noir -->
                 <div>
                     <div class="stat-row-label">
                         <span>ROUGE</span>
@@ -368,13 +440,13 @@
                         <span>NOIR</span>
                     </div>
                     <div class="bar-wrapper">
-                        <div class="bar-segment bg-red" id="bar-red" style="width: 50%;">0%</div>
-                        <div class="bar-separator"></div>
-                        <div class="bar-segment bg-black" id="bar-black" style="width: 50%;">0%</div>
+                        <div class="bar-segment bg-red" id="bar-red" style="width: 45%;">0%</div>
+                        <div class="bar-separator" id="sep-zero-1" style="width: 10%;">0%</div>
+                        <div class="bar-segment bg-black" id="bar-black" style="width: 45%;">0%</div>
                     </div>
                 </div>
 
-                <!-- Impair / Pair -->
+                <!-- Impair / Zéro / Pair -->
                 <div>
                     <div class="stat-row-label">
                         <span>IMPAIR</span>
@@ -382,22 +454,32 @@
                         <span>PAIR</span>
                     </div>
                     <div class="bar-wrapper">
-                        <div class="bar-segment bg-orange" id="bar-odd" style="width: 50%;">0%</div>
-                        <div class="bar-separator"></div>
-                        <div class="bar-segment bg-blue" id="bar-even" style="width: 50%;">0%</div>
+                        <div class="bar-segment bg-orange" id="bar-odd" style="width: 45%;">0%</div>
+                        <div class="bar-separator" id="sep-zero-2" style="width: 10%;">0%</div>
+                        <div class="bar-segment bg-blue" id="bar-even" style="width: 45%;">0%</div>
                     </div>
                 </div>
             </div>
 
-            <!-- GRILLE DE SAISIE PETITE ET INTEGRÉE DIRECTEMENT EN BAS -->
+            <!-- GRILLE DE SAISIE INTÉGRÉE AVEC MENTIONS LEGALES -->
             <div class="embedded-keypad">
                 <div class="keypad-grid" id="gridButtons">
-                    <!-- Rempli par le script de 0 à 36 -->
+                    <!-- Génré par JS -->
                 </div>
                 <div class="keypad-controls">
                     <button class="ctrl-btn bg-dark-gray" onclick="undoLast()">Retour (Undo)</button>
                     <button class="ctrl-btn bg-dark-red" onclick="clearAll()">Effacer Tout</button>
                 </div>
+                
+                <!-- Mention Règles Roulette Table 1 -->
+                <div class="table-info-text">
+                    RÈGLES DE LA ROULETTE — TABLE 1
+                </div>
+            </div>
+
+            <!-- Bandeau Jaune de Prévention Légale -->
+            <div class="prevention-banner">
+                ⚠️ LES JEUX D'ARGENT ET DE HASARD PEUVENT ÊTRE DANGEREUX : PERTES D'ARGENT, CONFLITS FAMILIAUX, ADDICTION... RETROUVEZ NOS CONSEILS SUR JOUEURS-INFO-SERVICE.FR (09 74 75 13 13 - APPEL NON SURTAXÉ)
             </div>
 
         </div>
@@ -423,14 +505,12 @@
             const grid = document.getElementById('gridButtons');
             grid.innerHTML = '';
             
-            // Le 0 en premier
             const btnZero = document.createElement('div');
             btnZero.className = 'key-btn bg-green';
             btnZero.textContent = '0';
             btnZero.onclick = () => selectNumber(0);
             grid.appendChild(btnZero);
 
-            // Les numéros de 1 à 36
             for(let i = 1; i <= 36; i++) {
                 const btn = document.createElement('div');
                 const col = getNumberColor(i);
@@ -484,19 +564,29 @@
             const container = document.getElementById('historyContainer');
             container.innerHTML = '';
 
-            // Affiche les 12 derniers numéros saisis
             const recent = [...history].reverse().slice(0, 12);
 
             recent.forEach(num => {
-                const color = getNumberColor(num);
-                
-                if (color === 'red') {
-                    container.innerHTML += `<div class="hist-cell c-red">${num}</div>`;
-                    container.innerHTML += `<div class="hist-cell empty">-</div>`;
+                if (num === 0) {
+                    container.innerHTML += `
+                        <div class="history-line zero-line">
+                            <div class="hist-cell c-green">${num}</div>
+                        </div>`;
                 } else {
-                    const textClass = color === 'green' ? 'c-green' : 'c-black';
-                    container.innerHTML += `<div class="hist-cell empty">-</div>`;
-                    container.innerHTML += `<div class="hist-cell ${textClass}">${num}</div>`;
+                    const color = getNumberColor(num);
+                    if (color === 'red') {
+                        container.innerHTML += `
+                            <div class="history-line">
+                                <div class="hist-cell c-red">${num}</div>
+                                <div class="hist-cell empty">-</div>
+                            </div>`;
+                    } else {
+                        container.innerHTML += `
+                            <div class="history-line">
+                                <div class="hist-cell empty">-</div>
+                                <div class="hist-cell c-black">${num}</div>
+                            </div>`;
+                    }
                 }
             });
         }
@@ -528,43 +618,69 @@
         }
 
         function calculateStats() {
-            if (history.length === 0) {
-                document.getElementById('bar-red').style.width = "50%"; document.getElementById('bar-red').textContent = "0%";
-                document.getElementById('bar-black').style.width = "50%"; document.getElementById('bar-black').textContent = "0%";
-                document.getElementById('bar-odd').style.width = "50%"; document.getElementById('bar-odd').textContent = "0%";
-                document.getElementById('bar-even').style.width = "50%"; document.getElementById('bar-even').textContent = "0%";
+            const total = history.length;
+            
+            if (total === 0) {
+                // Ratios par défaut à 50/50 sans zéro
+                document.getElementById('bar-red').style.width = "46%"; document.getElementById('bar-red').textContent = "0%";
+                document.getElementById('bar-black').style.width = "46%"; document.getElementById('bar-black').textContent = "0%";
+                document.getElementById('sep-zero-1').style.width = "8px"; document.getElementById('sep-zero-1').textContent = "";
+                
+                document.getElementById('bar-odd').style.width = "46%"; document.getElementById('bar-odd').textContent = "0%";
+                document.getElementById('bar-even').style.width = "46%"; document.getElementById('bar-even').textContent = "0%";
+                document.getElementById('sep-zero-2').style.width = "8px"; document.getElementById('sep-zero-2').textContent = "";
                 return;
             }
 
-            let red = 0, black = 0, odd = 0, even = 0;
-            let totalColors = 0, totalParity = 0;
+            let red = 0, black = 0, zero = 0, odd = 0, even = 0;
 
             history.forEach(num => {
-                if (num === 0) return; 
-                
-                if (redNumbers.includes(num)) red++;
-                else black++;
-                totalColors++;
+                if (num === 0) {
+                    zero++;
+                } else {
+                    if (redNumbers.includes(num)) red++;
+                    else black++;
 
-                if (num % 2 !== 0) odd++;
-                else even++;
-                totalParity++;
+                    if (num % 2 !== 0) odd++;
+                    else even++;
+                }
             });
 
-            const pRed = totalColors > 0 ? Math.round((red / totalColors) * 100) : 50;
-            const pBlack = totalColors > 0 ? Math.round((black / totalColors) * 100) : 50;
-            const pOdd = totalParity > 0 ? Math.round((odd / totalParity) * 100) : 50;
-            const pEven = totalParity > 0 ? Math.round((even / totalParity) * 100) : 50;
+            // Pourcentages globaux intégrant la proportion exacte de Zéros
+            const pRed = Math.round((red / total) * 100);
+            const pBlack = Math.round((black / total) * 100);
+            const pZero = Math.round((zero / total) * 100);
+            const pOdd = Math.round((odd / total) * 100);
+            const pEven = Math.round((even / total) * 100);
 
-            document.getElementById('bar-red').style.width = `${pRed}%`;
+            // Largeur dynamique des segments (Minimum 8px pour la ligne de séparation verte si 0%)
+            document.getElementById('bar-red').style.width = pRed > 0 ? `${pRed}%` : '0%';
             document.getElementById('bar-red').textContent = `${pRed}%`;
-            document.getElementById('bar-black').style.width = `${pBlack}%`;
+            document.getElementById('bar-black').style.width = pBlack > 0 ? `${pBlack}%` : '0%';
             document.getElementById('bar-black').textContent = `${pBlack}%`;
+            
+            const sep1 = document.getElementById('sep-zero-1');
+            if (pZero > 0) {
+                sep1.style.width = `${pZero}%`;
+                sep1.textContent = `${pZero}%`;
+            } else {
+                sep1.style.width = '8px';
+                sep1.textContent = '';
+            }
 
-            document.getElementById('bar-odd').style.width = `${pOdd}%`;
+            document.getElementById('bar-odd').style.width = pOdd > 0 ? `${pOdd}%` : '0%';
             document.getElementById('bar-odd').textContent = `${pOdd}%`;
-            document.getElementById('bar-even').style.width = `${pEven}%`;
+            document.getElementById('bar-even').style.width = pEven > 0 ? `${pEven}%` : '0%';
             document.getElementById('bar-even').textContent = `${pEven}%`;
+
+            const sep2 = document.getElementById('sep-zero-2');
+            if (pZero > 0) {
+                sep2.style.width = `${pZero}%`;
+                sep2.textContent = `${pZero}%`;
+            } else {
+                sep2.style.width = '8px';
+                sep2.textContent = '';
+            }
         }
 
         window.onload = init;
