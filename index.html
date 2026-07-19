@@ -3,23 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Roulette Maxence - V3 Pro Live</title>
+    <title>Ethan Casino - Live Board</title>
     <style>
-        /* CSS : Design Sombre & Pro comme image_11.png */
         :root {
-            --bg-color: #0c111e;
-            --panel-bg: #111827;
-            --panel-header-bg: #1f2937;
-            --roulette-red: #ef4444;
-            --roulette-black: #1a202c;
-            --roulette-green: #10b981;
-            --stat-bar-red: #ef4444;
-            --stat-bar-black: #4a5568;
-            --stat-bar-even: #f59e0b; /* Jaune/Ambre pour Impair */
-            --stat-bar-odd: #3b82f6; /* Bleu pour Pair */
-            --text-main: #f3f4f6;
-            --text-muted: #9ca3af;
-            --accent-gold: #fBBF24;
+            --bg-dark: #07090e;
+            --panel-texture: #141416;
+            --casino-red: #d61c1c;
+            --casino-black: #17181c;
+            --casino-green: #0b9351;
+            --text-gold: #d4af37;
         }
 
         * {
@@ -28,673 +20,554 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
-            touch-action: manipulation;
+            font-family: 'Impact', 'Arial Black', sans-serif;
         }
 
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background-color: var(--bg-dark);
+            color: #ffffff;
             height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Fixé, pas de défilement */
+            overflow: hidden;
         }
 
-        /* --- En-tête (Style Barrière) --- */
+        /* --- EN-TÊTE PERSONNALISÉ --- */
         header {
-            background-color: var(--panel-header-bg);
-            padding: 10px 15px;
+            background: linear-gradient(to bottom, #111, #000);
+            padding: 12px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #374151;
+            border-bottom: 2px solid #222;
+            height: 75px;
             flex-shrink: 0;
+        }
+
+        .brand-logo {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-b {
+            color: var(--text-gold);
+            font-size: 1.6rem;
+            font-family: 'Times New Roman', serif;
             font-weight: bold;
         }
 
-        header .title-group {
-            display: flex;
-            flex-direction: column;
+        .brand-name {
+            font-size: 1.3rem;
+            letter-spacing: 4px;
+            font-weight: bold;
+            color: #fff;
         }
 
-        header .brand {
-            font-size: 1.1rem;
-            color: var(--text-main);
-            letter-spacing: 1px;
-        }
-
-        header .app-name {
-            font-size: 0.9rem;
-            color: var(--accent-gold);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        header .mises-minmax {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .limits-box {
             text-align: right;
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            color: #aaa;
+            font-weight: bold;
         }
 
-        /* --- Disposition Principale --- */
-        .main-container {
+        .limits-box span {
+            color: #fff;
+            font-size: 1.1rem;
+        }
+
+        /* --- CONFIGURATION PANNEAUX --- */
+        .main-layout {
             display: flex;
             flex: 1;
             overflow: hidden;
-            width: 100%;
         }
 
-        /* === Zone Gauche : Historique & Gros Numéro === */
-        .left-panel {
-            flex: 1;
+        /* --- HISTORIQUE PRO (GAUCHE) --- */
+        .left-sidebar {
+            width: 30%;
+            background-color: var(--panel-texture);
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 0);
+            background-size: 4px 4px;
+            border-right: 3px solid #2d2d30;
             display: flex;
             flex-direction: column;
-            background-color: var(--panel-bg);
-            border-right: 1px solid #1f2937;
             padding: 10px;
-            overflow: hidden;
         }
 
-        /* Le Gros Numéro Dernier-Tombé (En haut à gauche) */
-        .last-number-block {
+        .current-number-box {
+            background-color: #111317;
+            border: 3px solid #3a3a40;
+            height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #0b1120;
-            border: 2px solid #374151;
-            border-radius: 8px;
             margin-bottom: 15px;
-            padding: 10px;
             flex-shrink: 0;
-            height: 120px; /* Ajuste pour iPad */
         }
 
-        .last-number-block .last-num {
-            font-size: 4rem; /* Très gros */
-            font-weight: 800;
+        .current-number-box span {
+            font-size: 6rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .history-grid-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .history-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            flex: 1;
+            overflow-y: auto;
+            align-content: start;
+            row-gap: 6px;
+        }
+
+        .hist-cell {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            width: 100%;
             line-height: 1;
         }
 
-        /* Historique sous le gros numéro (2 colonnes comme image_11.png) */
-        .history-panel {
-            flex: 1;
+        .hist-cell.empty {
+            visibility: hidden;
+        }
+
+        /* --- VISUEL & TAPIS SAISIE (DROITE) --- */
+        .right-content {
+            width: 70%;
             display: flex;
             flex-direction: column;
             overflow: hidden;
         }
 
-        .panel-title {
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 8px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #1f2937;
-            font-weight: bold;
+        /* Le Cylindre horizontal du haut */
+        .roulette-ribbon-container {
+            height: 160px;
+            background: #000;
+            border-bottom: 3px solid #2d2d30;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
         }
 
-        .history-list {
-            list-style: none;
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 colonnes */
-            gap: 4px;
-            overflow-y: auto;
-            flex: 1;
-            align-content: start;
+        .ribbon-wheel-track {
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
 
-        .history-item {
+        .ribbon-pocket {
+            width: 110px;
+            height: 110px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 6px;
-            border-radius: 4px;
+            font-size: 3.5rem;
             font-weight: bold;
-            font-size: 0.9rem;
-            color: white;
-            border: 1px solid transparent;
+            border: 2px solid #333;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
         }
 
-        /* === Zone Droite : Animation, Stats, Tapis Tactile === */
-        .right-panel {
-            flex: 3;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+        .ribbon-pocket.active-pocket {
+            border: 4px solid #fff;
+            transform: scale(1.05);
         }
 
-        /* --- Animation Roulette Live --- */
-        .animation-container {
-            width: 100%;
-            height: 180px; /* Zone d'animation en haut */
-            background-color: black;
-            border-bottom: 3px solid #1f2937;
-            position: relative;
-            flex-shrink: 0;
-            overflow: hidden;
-        }
-
-        /* Le Canvas pour dessiner la roue virtuelle */
-        #rouletteCanvas {
+        .ball-overlay {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* La zone cible pour la bille (Centre-Bas) */
-        .ball-pocket-target {
-            position: absolute;
-            bottom: 35px; /* Aligné sur la bille blanche de image_11.png */
-            left: 50%;
-            transform: translateX(-50%);
+            bottom: 15px;
             width: 30px;
             height: 30px;
-            border: 2px solid rgba(255,255,255,0.4);
+            background: radial-gradient(circle at 30% 30%, #fff, #aaa);
             border-radius: 50%;
-            z-index: 5;
-            background: rgba(255,255,255,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.9), 0 0 6px #fff;
+            z-index: 10;
         }
 
-        /* La bille blanche virtuelle (pour l'animation de fin) */
-        .bille {
-            position: absolute;
-            bottom: 38px;
-            left: 50%;
-            transform: translateX(-50%) scale(0);
-            width: 24px;
-            height: 24px;
-            background-color: white;
-            border-radius: 50%;
-            z-index: 6;
-            box-shadow: 0 0 5px rgba(255,255,255,0.8);
-            opacity: 0;
-            transition: all 0.3s ease-out;
-        }
-
-        .bille.active {
-            transform: translateX(-50%) scale(1);
-            opacity: 1;
-        }
-
-        /* --- Panel Stats (Au-dessus du tapis) --- */
-        .stats-panel-area {
-            background-color: #0b1120;
-            padding: 10px;
-            border-bottom: 2px solid #1f2937;
+        /* Panneau Statistiques */
+        .stats-section {
+            background-color: #0b0d13;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             flex-shrink: 0;
         }
 
-        .stats-group {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .stat-block {
-            background-color: var(--panel-bg);
-            border: 1px solid #1f2937;
-            border-radius: 6px;
-            padding: 10px;
-        }
-
-        .stat-header {
+        .stat-row-label {
             display: flex;
-            justify-content: space-around;
-            color: var(--text-muted);
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
             font-weight: bold;
-            margin-bottom: 8px;
-            padding-bottom: 4px;
-            border-bottom: 1px solid #1f2937;
+            letter-spacing: 2px;
+            color: #d1d5db;
+            padding: 0 5px;
         }
 
-        .stat-bar-container {
-            height: 20px;
-            background-color: #1a202c;
-            border-radius: 10px;
-            overflow: hidden;
+        .bar-wrapper {
+            height: 40px;
+            border: 2px solid #222;
             display: flex;
+            overflow: hidden;
             position: relative;
         }
 
-        /* Jauges fines et modernes */
-        .stat-bar-fill {
+        .bar-segment {
             height: 100%;
-            transition: width 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255,255,255,0.8);
-            font-size: 0.8rem;
+            font-size: 1.6rem;
             font-weight: bold;
+            transition: width 0.5s ease;
         }
 
-        /* Chauds / Froids (Compact, en bas des stats) */
-        .hot-cold-row {
+        .bar-separator {
+            width: 6px;
+            background-color: #00ff00;
+            height: 100%;
+            box-shadow: 0 0 10px #00ff00;
+        }
+
+        /* --- GRILLE DE SAISIE FIXE EN BAS --- */
+        .embedded-keypad {
+            flex: 1;
+            background-color: #0d0f14;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-top: 2px solid #222;
+            overflow-y: auto;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr); /* 7 colonnes pour rester compact en hauteur */
+            gap: 6px;
+        }
+
+        .key-btn {
+            height: 50px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.05);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .key-btn:active {
+            transform: scale(0.95);
+            opacity: 0.9;
+        }
+
+        .keypad-controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
+            margin-top: 2px;
         }
 
-        .hot-cold-btn {
-            background-color: var(--panel-bg);
-            border: 1px solid #1f2937;
-            color: var(--text-muted);
-            border-radius: 4px;
-            padding: 6px;
-            font-size: 0.75rem;
-            text-align: center;
-        }
-
-        .hot-cold-numbers {
-            font-size: 0.9rem;
+        .ctrl-btn {
+            height: 45px;
+            font-family: Arial, sans-serif;
+            font-size: 1rem;
             font-weight: bold;
-            color: var(--text-main);
-        }
-
-        /* --- Le Tapis Tactile Intégral (En bas à droite, fixé) --- */
-        .touch-pad {
-            flex: 1;
-            padding: 10px;
-            overflow: hidden;
-            background-color: var(--bg-color);
-        }
-
-        .touch-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 5px;
-            height: 100%;
-            overflow-y: auto;
-            align-content: start;
-        }
-
-        .touch-btn {
+            color: #fff;
+            border-radius: 6px;
+            border: none;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 6px;
-            font-size: 1.6rem; /* Gros pour iPad */
-            font-weight: bold;
-            border: 1px solid transparent;
-            color: white;
-            transition: transform 0.1s;
+            cursor: pointer;
         }
 
-        .touch-btn:active {
-            transform: scale(0.95);
-            opacity: 0.8;
-        }
-
-        /* Zéro et Contrôles en bas */
-        .control-row {
-            grid-column: 1 / -1;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5px;
-            margin-top: 5px;
-        }
-
-        .control-btn {
-            background-color: #1f2937;
-            color: var(--text-muted);
-            font-size: 1rem;
-            font-weight: bold;
-            border-radius: 6px;
-            border: 1px solid #374151;
-            height: 50px;
-        }
-
-        .btn-zero { background-color: var(--roulette-green); }
-        .btn-undo { background-color: #4a5568; }
-        .btn-clear { background-color: #1a202c; color: #ef4444; border-color: #7f1d1d; }
-
-        /* Classes de couleurs générales */
-        .red { background-color: var(--roulette-red); border-color: #b91c1c; }
-        .black { background-color: var(--roulette-black); border-color: #374151; }
-        .green { background-color: var(--roulette-green); border-color: #047857; }
-
+        /* Couleurs Thèmes */
+        .c-red { color: var(--casino-red); }
+        .c-black { color: #ffffff; }
+        .c-green { color: var(--casino-green); }
+        
+        .bg-red { background: linear-gradient(to bottom, #e52d2d, #a31515); }
+        .bg-black { background: linear-gradient(to bottom, #2c2d30, #17181c); }
+        .bg-green { background: linear-gradient(to bottom, #13b467, #0b7340); }
+        .bg-orange { background: linear-gradient(to bottom, #f59e0b, #d97706); }
+        .bg-blue { background: linear-gradient(to bottom, #3b82f6, #1d4ed8); }
+        .bg-dark-gray { background: #374151; }
+        .bg-dark-red { background: #991b1b; }
     </style>
 </head>
 <body>
 
-    <!-- Header (Style Barrière) -->
+    <!-- HEADER STYLE CASINO ETHAN -->
     <header>
-        <div class="title-group">
-            <span class="brand">GROUPE BARRIÈRE</span>
-            <span class="app-name">Roulette Maxence</span>
+        <div class="brand-logo">
+            <span class="logo-b">E</span>
+            <span class="brand-name">ETHAN CASINO</span>
         </div>
-        <div class="mises-minmax">
-            <p>Mise Min: 1€ / Mise Max: 500€</p>
-            <p>AR 3.2</p>
+        <div class="limits-box">
+            MISE MIN: <span>5€</span><br>
+            MISE MAX: <span>100€</span>
+        </div>
+        <div class="limits-box" style="text-align: right; padding-left: 20px;">
+            <br><span>AR 32</span>
         </div>
     </header>
 
-    <div class="main-container">
+    <div class="main-layout">
         
-        <!-- === Zone Gauche : Historique & Gros Numéro === -->
-        <div class="left-panel">
-            <!-- Gros Numéro -->
-            <div class="last-number-block">
-                <span class="last-num green" id="mainLastNumber">-</span>
+        <!-- SIDEBAR GAUCHE : HISTORIQUE STRICT 2 COLONNES -->
+        <div class="left-sidebar">
+            <div class="current-number-box" id="mainDisplayBox">
+                <span id="lastNumberOut">-</span>
             </div>
-            
-            <!-- Historique (2 Colonnes) -->
-            <div class="history-panel">
-                <div class="panel-title">Histo. (Noir | Rouge)</div>
-                <ul class="history-list" id="historyList">
-                    <!-- Historique généré ici -->
-                </ul>
+            <div class="history-grid-container">
+                <div class="history-columns" id="historyContainer">
+                    <!-- Généré par JS -->
+                </div>
             </div>
         </div>
 
-        <!-- === Zone Droite : Animation, Stats, Tapis === -->
-        <div class="right-panel">
+        <!-- CÔTÉ DROIT : ROULETTE & STATS & GRILLE FIXE -->
+        <div class="right-content">
             
-            <!-- Animation Roulette Virtual Live (Roue Virtuelle sur Canvas) -->
-            <div class="animation-container" id="animationArea">
-                <canvas id="rouletteCanvas"></canvas>
-                <div class="ball-pocket-target"></div> <!-- Cible -->
-                <div class="bille" id="liveBall"></div> <!-- Bille virtuelle -->
+            <!-- Bandeau Cylindre Roulette -->
+            <div class="roulette-ribbon-container">
+                <div class="ribbon-wheel-track" id="wheelRibbon">
+                    <div class="ribbon-pocket bg-black">-</div>
+                    <div class="ribbon-pocket bg-green active-pocket">-</div>
+                    <div class="ribbon-pocket bg-black">-</div>
+                </div>
+                <div class="ball-overlay"></div>
             </div>
 
-            <!-- Panel Stats (Au-dessus du tapis) -->
-            <div class="stats-panel-area">
-                <div class="panel-title">Statistiques</div>
-                <div class="stats-group">
-                    <!-- Noir / Rouge -->
-                    <div class="stat-block">
-                        <div class="stat-header"><span>Noir (N)</span> <span>| Rouge (R)</span></div>
-                        <div class="stat-bar-container">
-                            <div class="stat-bar-fill" id="bar-black" style="width: 50%; background-color: var(--stat-bar-black);">0</div>
-                            <div class="stat-bar-fill" id="bar-red" style="width: 50%; background-color: var(--stat-bar-red);">0</div>
-                        </div>
+            <!-- Section Graphiques Statistiques -->
+            <div class="stats-section">
+                <!-- Rouge / Noir -->
+                <div>
+                    <div class="stat-row-label">
+                        <span>ROUGE</span>
+                        <span>ZERO</span>
+                        <span>NOIR</span>
                     </div>
-                    <!-- Impair / Pair -->
-                    <div class="stat-block">
-                        <div class="stat-header"><span>Impair (I)</span> <span>| Pair (P)</span></div>
-                        <div class="stat-bar-container">
-                            <div class="stat-bar-fill" id="bar-odd" style="width: 50%; background-color: var(--stat-bar-even);">0</div>
-                            <div class="stat-bar-fill" id="bar-even" style="width: 50%; background-color: var(--stat-bar-odd);">0</div>
-                        </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-segment bg-red" id="bar-red" style="width: 50%;">0%</div>
+                        <div class="bar-separator"></div>
+                        <div class="bar-segment bg-black" id="bar-black" style="width: 50%;">0%</div>
                     </div>
                 </div>
 
-                <!-- Chauds / Froids (Compact) -->
-                <div class="hot-cold-row">
-                    <div class="hot-cold-btn">🔥 HOT: <span class="hot-cold-numbers" id="hotNumbers">-</span></div>
-                    <div class="hot-cold-btn">❄️ COLD: <span class="hot-cold-numbers" id="coldNumbers">-</span></div>
+                <!-- Impair / Pair -->
+                <div>
+                    <div class="stat-row-label">
+                        <span>IMPAIR</span>
+                        <span>ZERO</span>
+                        <span>PAIR</span>
+                    </div>
+                    <div class="bar-wrapper">
+                        <div class="bar-segment bg-orange" id="bar-odd" style="width: 50%;">0%</div>
+                        <div class="bar-separator"></div>
+                        <div class="bar-segment bg-blue" id="bar-even" style="width: 50%;">0%</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- Le Tapis Tactile Intégral (En bas à droite, fixé) -->
-            <div class="touch-pad">
-                <div class="touch-grid" id="touchGrid">
-                    <!-- Les numéros 1-36 générés par JS -->
+            <!-- GRILLE DE SAISIE PETITE ET INTEGRÉE DIRECTEMENT EN BAS -->
+            <div class="embedded-keypad">
+                <div class="keypad-grid" id="gridButtons">
+                    <!-- Rempli par le script de 0 à 36 -->
                 </div>
-                
-                <!-- Zéro et Contrôles -->
-                <div class="control-row">
-                    <button class="btn-zero touch-btn" onclick="requestAddNumber(0)">0</button>
-                    <button class="btn-undo control-btn" onclick="undoLast()">Undo</button>
-                    <button class="btn-clear control-btn" onclick="clearAll()">🗑️</button>
+                <div class="keypad-controls">
+                    <button class="ctrl-btn bg-dark-gray" onclick="undoLast()">Retour (Undo)</button>
+                    <button class="ctrl-btn bg-dark-red" onclick="clearAll()">Effacer Tout</button>
                 </div>
             </div>
+
         </div>
     </div>
 
     <script>
-        // Logique JavaScript (Roue Virtuelle & Stats)
-
-        const rouletteNumbers = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-        const rouletteColors = ['green', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red'];
-        const numToColorIdx = new Array(37).fill(0).map((_, i) => rouletteColors[i]);
-
+        const layoutOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        
         let history = [];
-        let numberCounts = new Array(37).fill(0);
 
-        // --- Logique Animation (Roue Virtuelle sur Canvas) ---
-        let canvas = document.getElementById('rouletteCanvas');
-        let ctx = canvas.getContext('2d');
-        let currentRotation = 0; // Rotation de la roue en radians
-        let isAnimating = false;
-        let animationDuration = 2.5; // Secondes de rotation
-
-        function init() {
-            generateTouchGrid();
-            resizeCanvas();
-            drawRoulette();
-            updateDisplay();
-            window.addEventListener('resize', resizeCanvas); // Gère les rotations de l'iPad
+        function getNumberColor(num) {
+            if (num === 0) return 'green';
+            return redNumbers.includes(num) ? 'red' : 'black';
         }
 
-        function generateTouchGrid() {
-            const grid = document.getElementById('touchGrid');
+        function init() {
+            buildEmbeddedGrid();
+            updateDashboard();
+        }
+
+        function buildEmbeddedGrid() {
+            const grid = document.getElementById('gridButtons');
             grid.innerHTML = '';
-            for (let i = 1; i <= 36; i++) {
-                const btn = document.createElement('button');
-                btn.className = `touch-btn ${numToColorIdx[i]}`;
+            
+            // Le 0 en premier
+            const btnZero = document.createElement('div');
+            btnZero.className = 'key-btn bg-green';
+            btnZero.textContent = '0';
+            btnZero.onclick = () => selectNumber(0);
+            grid.appendChild(btnZero);
+
+            // Les numéros de 1 à 36
+            for(let i = 1; i <= 36; i++) {
+                const btn = document.createElement('div');
+                const col = getNumberColor(i);
+                btn.className = `key-btn ${col === 'red' ? 'bg-red' : 'bg-black'}`;
                 btn.textContent = i;
-                btn.onclick = () => requestAddNumber(i); // Appelle l'animation
+                btn.onclick = () => selectNumber(i);
                 grid.appendChild(btn);
             }
         }
 
-        // === Système d'Animation : La Roue Tourne et la Bille Tombe ===
-
-        function requestAddNumber(num) {
-            if (isAnimating) return; // Empêche le spam pendant l'animation
-            
-            isAnimating = true;
-            document.body.classList.add('is-animating'); // Empêche l'interaction
-            
-            // 1. Lance la roue : Animation de rotation
-            currentRotation += (2 * Math.PI * 5) + Math.random() * (2 * Math.PI); // Rotation aléatoire de plus de 5 tours
-            drawRoulette(true); // Redessine avec animation de rotation
-            
-            // 2. Cache la bille virtuelle
-            const ball = document.getElementById('liveBall');
-            ball.classList.remove('active');
-
-            // 3. Après la durée de rotation (2.5s) : La bille tombe sur le numéro
-            setTimeout(() => {
-                // Calcule l'angle exact pour que le numéro 'num' soit au centre-bas (index 0)
-                let targetIdx = rouletteNumbers.indexOf(num);
-                let finalAngle = - (targetIdx * (2 * Math.PI / 37)) - (Math.PI / 2); // Ajuste l'angle
-                
-                // Redessine une dernière fois la roue fixe sur le numéro cible
-                currentRotation = finalAngle;
-                drawRoulette(false);
-                
-                // Active l'animation de la bille qui tombe (CSS)
-                ball.classList.add('active');
-                
-                // 4. Finalise : Ajoute le numéro et débloque après 1s de bille
-                setTimeout(() => {
-                    addNumber(num); // Logique de stats
-                    isAnimating = false;
-                    document.body.classList.remove('is-animating');
-                }, 1000); // Temps d'animation de la bille
-
-            }, animationDuration * 1000); // Temps de rotation
-        }
-
-        function resizeCanvas() {
-            const container = document.getElementById('animationArea');
-            canvas.width = container.offsetWidth * window.devicePixelRatio;
-            canvas.height = container.offsetHeight * window.devicePixelRatio;
-            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
-            drawRoulette();
-        }
-
-        function drawRoulette(animateRotation = false) {
-            if (!canvas.width) return;
-            const width = canvas.width / window.devicePixelRatio;
-            const height = canvas.height / window.devicePixelRatio;
-            ctx.clearRect(0, 0, width, height);
-
-            const centerX = width / 2;
-            const centerY = height + (height * 0.4); // Centre la roue en bas, hors-champ
-            const radius = height * 1.3; // Très grand rayon pour un effet plan
-            const arcWidth = radius / 12; // Largeur de la piste des numéros
-
-            ctx.save();
-            ctx.translate(centerX, centerY);
-            if (animateRotation) {
-                // Animation de rotation CSS sur le canvas (plus simple que le JS)
-                canvas.style.transition = `transform ${animationDuration}s cubic-bezier(0.1, 0.7, 0.1, 1)`;
-                canvas.style.transform = `rotate(${currentRotation}rad)`;
-            } else {
-                canvas.style.transition = 'none'; // Pas de transition en mode fixe
-                canvas.style.transform = 'none';
-            }
-
-            // Dessine les 37 segments (poches)
-            const anglePerNumber = (2 * Math.PI) / 37;
-            for (let i = 0; i < 37; i++) {
-                const number = rouletteNumbers[i];
-                const colorIdx = rouletteColors[number] === 'green' ? 0 : rouletteColors[number] === 'red' ? 1 : 2;
-                const colors = ['#10b981', '#ef4444', '#1a202c']; // Green, Red, Black
-
-                ctx.save();
-                ctx.rotate(i * anglePerNumber - Math.PI / 2); // Centre sur le haut
-
-                // Poche du numéro
-                ctx.fillStyle = colors[colorIdx];
-                ctx.beginPath();
-                ctx.moveTo(0, 0);
-                ctx.arc(0, 0, radius, 0, anglePerNumber);
-                ctx.fill();
-
-                // Texte du numéro (Style image_11.png)
-                ctx.fillStyle = 'white';
-                ctx.font = `bold ${radius / 8}px 'Helvetica Neue'`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText(number, radius - arcWidth, arcWidth / 2);
-
-                ctx.restore();
-            }
-            ctx.restore();
-        }
-
-        // === Logique d'Ajout et de Statistiques (v2) ===
-
-        function addNumber(num) {
+        function selectNumber(num) {
             history.push(num);
-            numberCounts[num]++;
-            updateDisplay();
+            updateDashboard();
         }
 
         function undoLast() {
-            if (history.length > 0) {
-                const lastNum = history.pop();
-                numberCounts[lastNum]--;
-                updateDisplay();
-            }
+            history.pop();
+            updateDashboard();
         }
 
         function clearAll() {
             history = [];
-            numberCounts.fill(0);
-            updateDisplay();
+            updateDashboard();
         }
 
-        function updateDisplay() {
-            updateMainLastNumber();
-            updateHistory();
-            updateStats();
-            updateHotCold();
-        }
-
-        function updateMainLastNumber() {
-            const mainNum = document.getElementById('mainLastNumber');
+        function updateDashboard() {
+            const lastOutSpan = document.getElementById('lastNumberOut');
+            const mainBox = document.getElementById('mainDisplayBox');
+            
             if (history.length > 0) {
                 const last = history[history.length - 1];
-                mainNum.textContent = last;
-                mainNum.className = `last-num ${rouletteColors[last]}`;
-            } else {
-                mainNum.textContent = '-';
-                mainNum.className = 'last-num green';
-            }
-        }
-
-        function updateHistory() {
-            const list = document.getElementById('historyList');
-            list.innerHTML = '';
-            // Affiche les 14 derniers numéros, du plus récent au plus ancien, dans l'ordre strict de saisie
-            const recentHistory = [...history].reverse().slice(0, 14);
-            recentHistory.forEach(num => {
-                const item = document.createElement('li');
-                item.className = `history-item ${rouletteColors[num]}`;
-                item.textContent = num;
-                list.appendChild(item);
-            });
-        }
-
-        function updateStats() {
-            if (history.length === 0) {
-                resetStatBars();
-                return;
-            }
-
-            let red = 0, black = 0, even = 0, odd = 0;
-            history.forEach(num => {
-                if (num === 0) return; // Zéro ne compte pas
-                if (rouletteColors[num] === 'red') red++;
-                else if (rouletteColors[num] === 'black') black++;
+                lastOutSpan.textContent = last;
                 
-                if (num % 2 === 0) even++;
-                else odd++;
+                mainBox.className = 'current-number-box';
+                if(getNumberColor(last) === 'red') mainBox.style.color = 'var(--casino-red)';
+                else if(getNumberColor(last) === 'black') mainBox.style.color = '#ffffff';
+                else mainBox.style.color = 'var(--casino-green)';
+                
+                updateRibbon(last);
+            } else {
+                lastOutSpan.textContent = '-';
+                mainBox.style.color = '#ffffff';
+                resetRibbonBlank();
+            }
+
+            renderSplitHistory();
+            calculateStats();
+        }
+
+        function renderSplitHistory() {
+            const container = document.getElementById('historyContainer');
+            container.innerHTML = '';
+
+            // Affiche les 12 derniers numéros saisis
+            const recent = [...history].reverse().slice(0, 12);
+
+            recent.forEach(num => {
+                const color = getNumberColor(num);
+                
+                if (color === 'red') {
+                    container.innerHTML += `<div class="hist-cell c-red">${num}</div>`;
+                    container.innerHTML += `<div class="hist-cell empty">-</div>`;
+                } else {
+                    const textClass = color === 'green' ? 'c-green' : 'c-black';
+                    container.innerHTML += `<div class="hist-cell empty">-</div>`;
+                    container.innerHTML += `<div class="hist-cell ${textClass}">${num}</div>`;
+                }
             });
-
-            // Calcule les pourcentages (Éviter la division par zéro)
-            const totalColors = history.filter(n => n !== 0).length || 1; 
-
-            // Mise à jour des barres et des chiffres de pourcentage
-            updatePercentBar('red', 'black', red, black, totalColors);
-            updatePercentBar('even', 'odd', even, odd, totalColors);
         }
 
-        function updatePercentBar(id1, id2, count1, count2, total) {
-            const percent1 = Math.round((count1 / total) * 100);
-            const percent2 = Math.round((count2 / total) * 100);
+        function updateRibbon(currentNum) {
+            const ribbon = document.getElementById('wheelRibbon');
+            const idx = layoutOrder.indexOf(currentNum);
             
-            document.getElementById(`bar-${id1}`).style.width = `${percent1}%`;
-            document.getElementById(`bar-${id1}`).textContent = `${percent1}`;
+            const prevIdx = (idx - 1 + 37) % 37;
+            const nextIdx = (idx + 1) % 37;
             
-            document.getElementById(`bar-${id2}`).style.width = `${percent2}%`;
-            document.getElementById(`bar-${id2}`).textContent = `${percent2}`;
+            const prevNum = layoutOrder[prevIdx];
+            const nextNum = layoutOrder[nextIdx];
+
+            ribbon.innerHTML = `
+                <div class="ribbon-pocket ${getNumberColor(prevNum) === 'red' ? 'bg-red' : (prevNum === 0 ? 'bg-green' : 'bg-black')}">${prevNum}</div>
+                <div class="ribbon-pocket ${getNumberColor(currentNum) === 'red' ? 'bg-red' : (currentNum === 0 ? 'bg-green' : 'bg-black')} active-pocket">${currentNum}</div>
+                <div class="ribbon-pocket ${getNumberColor(nextNum) === 'red' ? 'bg-red' : (nextNum === 0 ? 'bg-green' : 'bg-black')}">${nextNum}</div>
+            `;
         }
 
-        function resetStatBars() {
-            const bars = ['bar-red', 'bar-black', 'bar-even', 'bar-odd'];
-            bars.forEach(id => {
-                document.getElementById(id).style.width = '50%';
-                document.getElementById(id).textContent = '0';
-            });
+        function resetRibbonBlank() {
+            const ribbon = document.getElementById('wheelRibbon');
+            ribbon.innerHTML = `
+                <div class="ribbon-pocket bg-black">-</div>
+                <div class="ribbon-pocket bg-green active-pocket">-</div>
+                <div class="ribbon-pocket bg-black">-</div>
+            `;
         }
 
-        function updateHotCold() {
-            if (history.length < 5) {
-                document.getElementById('hotNumbers').textContent = '-';
-                document.getElementById('coldNumbers').textContent = '-';
+        function calculateStats() {
+            if (history.length === 0) {
+                document.getElementById('bar-red').style.width = "50%"; document.getElementById('bar-red').textContent = "0%";
+                document.getElementById('bar-black').style.width = "50%"; document.getElementById('bar-black').textContent = "0%";
+                document.getElementById('bar-odd').style.width = "50%"; document.getElementById('bar-odd').textContent = "0%";
+                document.getElementById('bar-even').style.width = "50%"; document.getElementById('bar-even').textContent = "0%";
                 return;
             }
-            let counts = numberCounts.map((count, num) => ({ num, count }));
-            let sortedHot = [...counts].sort((a, b) => b.count - a.count);
-            document.getElementById('hotNumbers').textContent = sortedHot.slice(0, 3).filter(x => x.count > 0).map(x => x.num).join(', ') || '-';
-            let sortedCold = [...counts].sort((a, b) => a.count - b.count);
-            document.getElementById('coldNumbers').textContent = sortedCold.slice(0, 3).map(x => x.num).join(', ');
+
+            let red = 0, black = 0, odd = 0, even = 0;
+            let totalColors = 0, totalParity = 0;
+
+            history.forEach(num => {
+                if (num === 0) return; 
+                
+                if (redNumbers.includes(num)) red++;
+                else black++;
+                totalColors++;
+
+                if (num % 2 !== 0) odd++;
+                else even++;
+                totalParity++;
+            });
+
+            const pRed = totalColors > 0 ? Math.round((red / totalColors) * 100) : 50;
+            const pBlack = totalColors > 0 ? Math.round((black / totalColors) * 100) : 50;
+            const pOdd = totalParity > 0 ? Math.round((odd / totalParity) * 100) : 50;
+            const pEven = totalParity > 0 ? Math.round((even / totalParity) * 100) : 50;
+
+            document.getElementById('bar-red').style.width = `${pRed}%`;
+            document.getElementById('bar-red').textContent = `${pRed}%`;
+            document.getElementById('bar-black').style.width = `${pBlack}%`;
+            document.getElementById('bar-black').textContent = `${pBlack}%`;
+
+            document.getElementById('bar-odd').style.width = `${pOdd}%`;
+            document.getElementById('bar-odd').textContent = `${pOdd}%`;
+            document.getElementById('bar-even').style.width = `${pEven}%`;
+            document.getElementById('bar-even').textContent = `${pEven}%`;
         }
 
-        init();
+        window.onload = init;
     </script>
 </body>
 </html>
