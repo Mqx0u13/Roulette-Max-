@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Roulette Stats Dashboard</title>
+    <title>Roulette Max Pro v2</title>
     <style>
         :root {
             --bg-color: #0b0f19;
-            --panel-bg: #161f32;
-            --accent-gold: #d4af37;
-            --roulette-red: #e63946;
-            --roulette-black: #1d1d1f;
-            --roulette-green: #2a9d8f;
-            --text-main: #f8f9fa;
+            --panel-bg: #111827;
+            --accent-gold: #f59e0b;
+            --roulette-red: #ef4444;
+            --roulette-black: #1f2937;
+            --roulette-green: #10b981;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
         }
 
         * {
@@ -23,420 +22,490 @@
             padding: 0;
             user-select: none;
             -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            display: flex;
             height: 100vh;
-            overflow: hidden;
-            padding: 20px;
-            gap: 20px;
-        }
-
-        /* Panneau Gauche : Saisie et Clavier */
-        .left-panel {
-            flex: 1.5;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            overflow: hidden; /* Supprime tout défilement */
         }
 
-        .header {
-            background: var(--panel-bg);
-            padding: 15px;
-            border-radius: 12px;
+        /* --- En-tête compact --- */
+        header {
+            background-color: var(--panel-bg);
+            padding: 10px;
             text-align: center;
-            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid #1f2937;
+            flex-shrink: 0;
         }
 
-        .header h1 {
-            font-size: 1.4rem;
+        header h1 {
             color: var(--accent-gold);
-            letter-spacing: 2px;
+            font-size: 1.2rem;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
         }
 
-        /* Grille des numéros style tapis/clavier */
-        .keypad {
+        /* --- Disposition principale --- */
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* --- Panneau de saisie (Gauche) --- */
+        .input-panel {
+            flex: 3;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #1f2937;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        /* Grille des numéros compacte */
+        .numbers-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            flex-grow: 1;
-            background: var(--panel-bg);
-            padding: 15px;
-            border-radius: 12px;
-        }
-
-        .zero-btn {
-            grid-column: span 3;
-            background-color: var(--roulette-green);
-        }
-
-        .num-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.8rem;
-            font-weight: bold;
-            border-radius: 8px;
-            border: none;
-            color: white;
-            cursor: pointer;
-            transition: transform 0.05s ease, opacity 0.1s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-            aspect-ratio: 4/3;
-        }
-
-        .num-btn:active {
-            transform: scale(0.95);
-            opacity: 0.8;
-        }
-
-        .red { background-color: var(--roulette-red); }
-        .black { background-color: var(--roulette-black); border: 1px solid #333; }
-
-        /* Panneau Droite : Historique et Stats */
-        .right-panel {
+            gap: 4px;
             flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            overflow: hidden;
         }
 
-        .panel-title {
-            font-size: 1rem;
-            color: var(--accent-gold);
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-            padding-bottom: 5px;
-        }
-
-        .history-box {
-            background: var(--panel-bg);
-            padding: 15px;
-            border-radius: 12px;
-            height: 140px;
-        }
-
-        .history-list {
-            display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            height: 90px;
-            align-items: center;
-        }
-
-        .history-item {
-            min-width: 60px;
-            height: 60px;
-            border-radius: 50%;
+        .number-btn {
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
             font-weight: bold;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
-            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes pop {
-            0% { transform: scale(0); }
-            100% { transform: scale(1); }
-        }
-
-        .stats-box {
-            background: var(--panel-bg);
-            padding: 15px;
-            border-radius: 12px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .stat-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(0,0,0,0.2);
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .stat-bars {
-            display: flex;
-            width: 60%;
-            height: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            background: #2c3e50;
-        }
-
-        .bar {
-            height: 100%;
-            transition: width 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.75rem;
-            font-weight: bold;
             color: white;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            transition: transform 0.1s;
         }
 
-        /* Chauds & Froids */
-        .hot-cold-container {
+        .number-btn:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        /* Zéro compact */
+        .number-0 {
+            grid-column: 1 / -1;
+            background-color: var(--roulette-green);
+            flex: 0 0 40px; /* Hauteur fixe pour le zéro */
+            margin-bottom: 4px;
+        }
+
+        /* Couleurs des numéros */
+        .red { background-color: var(--roulette-red); }
+        .black { background-color: var(--roulette-black); }
+
+        /* Panneau de chances simples (Manque, Passe, etc.) */
+        .simple-chances {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            margin-top: 10px;
+            flex: 0 0 80px; /* Hauteur fixe */
         }
 
-        .hf-panel {
-            background: rgba(0, 0, 0, 0.15);
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-        }
-
-        .hf-title {
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        .hf-title.hot { color: #ff4d4d; }
-        .hf-title.cold { color: #4da6ff; }
-
-        .hf-list {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-        }
-
-        .hf-ball {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
+        .chance-btn {
+            background-color: #1f2937;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.9rem;
             font-weight: bold;
+            border-radius: 4px;
+            border: 1px solid #374151;
+            color: var(--text-muted);
         }
 
-        .actions {
+        .chance-btn.red-icon { color: var(--roulette-red); font-size: 1.2rem; }
+        .chance-btn.black-icon { color: white; font-size: 1.2rem; }
+
+        /* --- Panneau de stats (Droite) --- */
+        .stats-panel {
+            flex: 1.5;
             display: flex;
-            gap: 10px;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #0d111a;
+            overflow: hidden;
         }
 
-        .btn-action {
-            flex: 1;
-            padding: 12px;
-            background: #2c3e50;
-            border: none;
-            color: white;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
+        .panel-title {
+            color: var(--accent-gold);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #1f2937;
+            padding-bottom: 4px;
         }
-        .btn-action:active { opacity: 0.8; }
+
+        /* Historique vertical compact */
+        .history-panel {
+            flex: 1.5;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .history-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            border-radius: 3px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        /* Statistiques compactes */
+        .realtime-stats {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .stat-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .stat-bar-container {
+            height: 14px;
+            background-color: #1f2937;
+            border-radius: 7px;
+            overflow: hidden;
+            display: flex;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+            font-weight: bold;
+            transition: width 0.3s;
+        }
+
+        /* Chauds/Froids compact */
+        .hot-cold-panel {
+            flex: 0.8;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .hot-cold-box {
+            background-color: #111827;
+            border-radius: 4px;
+            padding: 5px;
+            text-align: center;
+        }
+
+        .hot-cold-title {
+            font-size: 0.7rem;
+            margin-bottom: 4px;
+            color: var(--text-muted);
+        }
+
+        .hot-cold-numbers {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-main);
+        }
+
+        /* Boutons de contrôle compacts */
+        .control-panel {
+            flex: 0 0 35px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .control-btn {
+            background-color: #1f2937;
+            color: var(--text-muted);
+            border: 1px solid #374151;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .control-btn.undo { background-color: #374151; }
+        .control-btn.clear { background-color: #1a202c; color: #ef4444; border-color: #7f1d1d; }
+
     </style>
 </head>
 <body>
+    <header>
+        <h1>Tableau de Bord - Roulette Max</h1>
+    </header>
 
-    <!-- PANNEAU GAUCHE : CLAVIER DE SAISIE -->
-    <div class="left-panel">
-        <div class="header">
-            <h1>Tableau de Bord Roulette</h1>
-        </div>
-        <div class="keypad" id="keypad">
-            <button class="num-btn zero-btn" onclick="addNumber(0)">0</button>
-            <!-- Généré dynamiquement en JS pour respecter les vraies couleurs de la roulette -->
-        </div>
-    </div>
-
-    <!-- PANNEAU DROITE : HISTORIQUE & STATS -->
-    <div class="right-panel">
-        <div class="history-box">
-            <div class="panel-title">Derniers numéros tombés</div>
-            <div class="history-list" id="historyList">
-                <!-- Numéros récents -->
+    <div class="main-container">
+        <!-- Panneau de saisie (Sert de tapis de mise tactile) -->
+        <div class="input-panel">
+            <div class="numbers-grid" id="numbersGrid">
+                <!-- Le Zéro compact -->
+                <button class="number-btn number-0" onclick="addNumber(0)">0</button>
+                <!-- Les numéros 1-36 seront générés ici par JS -->
             </div>
-        </div>
-
-        <div class="stats-box">
-            <div class="panel-title">Statistiques en Temps Réel</div>
             
-            <!-- ROUGE / NOIR -->
-            <div class="stat-row">
-                <span>Rouge / Noir</span>
-                <div class="stat-bars">
-                    <div id="bar-red" class="bar" style="background-color: var(--roulette-red); width: 50%;">0%</div>
-                    <div id="bar-black" class="bar" style="background-color: var(--roulette-black); width: 50%;">0%</div>
+            <!-- Chances Simples tactiles -->
+            <div class="simple-chances">
+                <button class="chance-btn" id="chance-manque">1-18</button>
+                <button class="chance-btn" id="chance-even">EVEN</button>
+                <button class="chance-btn red-icon" id="chance-red">🔴</button>
+                <button class="chance-btn black-icon" id="chance-black">⚫</button>
+                <button class="chance-btn" id="chance-odd">ODD</button>
+                <button class="chance-btn" id="chance-passe">19-36</button>
+            </div>
+        </div>
+
+        <!-- Panneau de Statistiques (Copie de image_12.png) -->
+        <div class="stats-panel">
+            <!-- Historique Vertical -->
+            <div class="history-panel">
+                <div class="panel-title">Derniers Numéros</div>
+                <ul class="history-list" id="historyList">
+                    <!-- Historique inséré ici -->
+                </ul>
+            </div>
+
+            <!-- Stats temps réel avec barres de pourcentage -->
+            <div class="realtime-stats">
+                <div class="panel-title">Stats</div>
+                
+                <div class="stat-group">
+                    <div class="stat-header"><span>R</span> <span id="percent-red">0%</span></div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-fill" id="bar-red" style="width: 0%; background-color: var(--roulette-red);"></div>
+                    </div>
+                </div>
+                
+                <div class="stat-group">
+                    <div class="stat-header"><span>B</span> <span id="percent-black">0%</span></div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-fill" id="bar-black" style="width: 0%; background-color: var(--roulette-black);"></div>
+                    </div>
+                </div>
+                
+                <div class="stat-group">
+                    <div class="stat-header"><span>Pair / Impair</span> <span id="percent-even">0%</span> / <span id="percent-odd">0%</span></div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-fill" id="bar-even" style="width: 0%; background-color: #3b82f6;">P</div>
+                        <div class="stat-bar-fill" id="bar-odd" style="width: 0%; background-color: #64748b;">I</div>
+                    </div>
+                </div>
+                
+                <div class="stat-group">
+                    <div class="stat-header"><span>1-18 / 19-36</span> <span id="percent-manque">0%</span> / <span id="percent-passe">0%</span></div>
+                    <div class="stat-bar-container">
+                        <div class="stat-bar-fill" id="bar-manque" style="width: 0%; background-color: #10b981;">M</div>
+                        <div class="stat-bar-fill" id="bar-passe" style="width: 0%; background-color: #0369a1;">P</div>
+                    </div>
                 </div>
             </div>
 
-            <!-- PAIR / IMPAIR -->
-            <div class="stat-row">
-                <span>Pair / Impair</span>
-                <div class="stat-bars">
-                    <div id="bar-even" class="bar" style="background-color: #34495e; width: 50%;">0%</div>
-                    <div id="bar-odd" class="bar" style="background-color: #7f8c8d; width: 50%;">0%</div>
+            <!-- Chauds / Froids -->
+            <div class="hot-cold-panel">
+                <div class="hot-cold-box">
+                    <div class="hot-cold-title">🔥 HOT</div>
+                    <div class="hot-cold-numbers" id="hotNumbers">-</div>
+                </div>
+                <div class="hot-cold-box">
+                    <div class="hot-cold-title">❄️ COLD</div>
+                    <div class="hot-cold-numbers" id="coldNumbers">-</div>
                 </div>
             </div>
 
-            <!-- MANQUE / PASSE -->
-            <div class="stat-row">
-                <span>1-18 / 19-36</span>
-                <div class="stat-bars">
-                    <div id="bar-low" class="bar" style="background-color: #16a085; width: 50%;">0%</div>
-                    <div id="bar-high" class="bar" style="background-color: #2980b9; width: 50%;">0%</div>
-                </div>
-            </div>
-
-            <!-- CHAUDS ET FROIDS -->
-            <div class="hot-cold-container">
-                <div class="hf-panel">
-                    <div class="hf-title hot">🔥 CHAUDS (HOT)</div>
-                    <div class="hf-list" id="hot-list">-</div>
-                </div>
-                <div class="hf-panel">
-                    <div class="hf-title cold">❄️ FROIDS (COLD)</div>
-                    <div class="hf-list" id="cold-list">-</div>
-                </div>
-            </div>
-
-            <div class="actions">
-                <button class="btn-action" style="background-color: #c0392b;" onclick="undo()">Retour arrière</button>
-                <button class="btn-action" onclick="resetStats()">Effacer tout</button>
+            <!-- Contrôles compacts -->
+            <div class="control-panel">
+                <button class="control-btn undo" onclick="undoLast()">Annuler</button>
+                <button class="control-btn clear" onclick="clearAll()">🗑️</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Couleurs officielles de la roulette européenne
-        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-        let history = [];
-        // Compteur global pour tous les numéros (0 à 36)
-        let counts = Array(37).fill(0);
+        const rouletteColors = [
+            'green', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'black', 'red',
+            'black', 'red', 'black', 'red', 'black', 'red', 'red', 'black', 'red', 'black', 'red', 'black', 'red',
+            'black', 'red', 'black', 'black', 'red', 'black', 'red', 'black', 'red', 'black', 'red'
+        ];
 
-        // Initialisation du clavier numérique dans l'ordre du tapis
-        const keypad = document.getElementById('keypad');
-        for (let i = 1; i <= 36; i++) {
-            const btn = document.createElement('button');
-            btn.innerText = i;
-            btn.className = `num-btn ${redNumbers.includes(i) ? 'red' : 'black'}`;
-            btn.onclick = () => addNumber(i);
-            keypad.appendChild(btn);
+        let history = [];
+        let numberCounts = new Array(37).fill(0);
+
+        function init() {
+            generateNumbersGrid();
+            updateDisplay();
         }
 
-        function getColorClass(num) {
-            if (num === 0) return 'style="background-color: var(--roulette-green);"';
-            return redNumbers.includes(num) ? 'style="background-color: var(--roulette-red);"' : 'style="background-color: var(--roulette-black); border: 1px solid #333;"';
+        function generateNumbersGrid() {
+            const grid = document.getElementById('numbersGrid');
+            for (let i = 1; i <= 36; i++) {
+                const btn = document.createElement('button');
+                btn.className = `number-btn ${rouletteColors[i]}`;
+                btn.textContent = i;
+                btn.onclick = () => addNumber(i);
+                grid.appendChild(btn);
+            }
         }
 
         function addNumber(num) {
-            history.unshift(num); // Ajoute au début
-            counts[num]++;
-            updateUI();
+            history.push(num);
+            numberCounts[num]++;
+            updateDisplay();
         }
 
-        function undo() {
+        function undoLast() {
             if (history.length > 0) {
-                const removed = history.shift();
-                counts[removed]--;
-                updateUI();
+                const lastNum = history.pop();
+                numberCounts[lastNum]--;
+                updateDisplay();
             }
         }
 
-        function resetStats() {
-            if(confirm("Réinitialiser toutes les statistiques de la partie ?")) {
-                history = [];
-                counts = Array(37).fill(0);
-                updateUI();
-            }
+        function clearAll() {
+            history = [];
+            numberCounts.fill(0);
+            updateDisplay();
         }
 
-        function updateUI() {
-            // 1. Mise à jour de l'historique visuel
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = '';
-            history.slice(0, 10).forEach(num => {
-                const item = document.createElement('div');
-                item.className = 'history-item';
-                item.innerHTML = `<span ${getColorClass(num)} class="history-item">${num}</span>`;
-                historyList.appendChild(item);
+        function updateDisplay() {
+            updateHistory();
+            updateStats();
+            updateHotCold();
+        }
+
+        function updateHistory() {
+            const list = document.getElementById('historyList');
+            list.innerHTML = '';
+            // Affiche les 15 derniers numéros, du plus récent au plus ancien
+            const recentHistory = [...history].reverse().slice(0, 15);
+            recentHistory.forEach(num => {
+                const item = document.createElement('li');
+                item.className = `history-item ${rouletteColors[num]}`;
+                item.textContent = num;
+                list.appendChild(item);
+            });
+        }
+
+        function updateStats() {
+            if (history.length === 0) {
+                resetStatBars();
+                return;
+            }
+
+            let red = 0, black = 0, even = 0, odd = 0, manque = 0, passe = 0;
+            
+            history.forEach(num => {
+                if (num === 0) return; // Le zéro ne compte pas dans les chances simples
+                
+                // Rouge / Noir
+                if (rouletteColors[num] === 'red') red++;
+                else if (rouletteColors[num] === 'black') black++;
+                
+                // Pair / Impair
+                if (num % 2 === 0) even++;
+                else odd++;
+                
+                // Manque (1-18) / Passe (19-36)
+                if (num >= 1 && num <= 18) manque++;
+                else if (num >= 19 && num <= 36) passe++;
             });
 
-            // Filter les zéros pour les stats simples (Rouge/Noir, etc.)
-            const noZeros = history.filter(n => n !== 0);
-            const totalSimple = noZeros.length;
+            const total = history.filter(n => n !== 0).length || 1; // Évite div par zéro
 
-            if (totalSimple > 0) {
-                // Rouge vs Noir
-                const reds = noZeros.filter(n => redNumbers.includes(n)).length;
-                const redPct = Math.round((reds / totalSimple) * 100);
-                document.getElementById('bar-red').style.width = `${redPct}%`;
-                document.getElementById('bar-red').innerText = `${redPct}% R`;
-                document.getElementById('bar-black').style.width = `${100 - redPct}%`;
-                document.getElementById('bar-black').innerText = `${100 - redPct}% N`;
-
-                // Pair vs Impair
-                const evens = noZeros.filter(n => n % 2 === 0).length;
-                const evenPct = Math.round((evens / totalSimple) * 100);
-                document.getElementById('bar-even').style.width = `${evenPct}%`;
-                document.getElementById('bar-even').innerText = `${evenPct}% P`;
-                document.getElementById('bar-odd').style.width = `${100 - evenPct}%`;
-                document.getElementById('bar-odd').innerText = `${100 - evenPct}% I`;
-
-                // Manque vs Passe (1-18 vs 19-36)
-                const lows = noZeros.filter(n => n <= 18).length;
-                const lowPct = Math.round((lows / totalSimple) * 100);
-                document.getElementById('bar-low').style.width = `${lowPct}%`;
-                document.getElementById('bar-low').innerText = `${lowPct}% M`;
-                document.getElementById('bar-high').style.width = `${100 - lowPct}%`;
-                document.getElementById('bar-high').innerText = `${100 - lowPct}% P`;
-            } else {
-                // Reset barres à 50/50 si pas de data
-                document.querySelectorAll('.bar').forEach(b => {
-                    b.style.width = '50%';
-                    b.innerText = '0%';
-                });
-            }
-
-            // 2. Gestion des Chauds (Hot) et Froids (Cold)
-            // Crée un tableau d'objets [{num: 0, count: X}, ...]
-            let mapped = counts.map((count, num) => ({ num, count }));
+            // Mise à jour des pourcentages et des barres
+            updateStatBar('red', red, total);
+            updateStatBar('black', black, total);
             
-            // Tri par occurrences
-            mapped.sort((a, b) => b.count - a.count);
-
-            const hotList = document.getElementById('hot-list');
-            const coldList = document.getElementById('cold-list');
-            hotList.innerHTML = '';
-            coldList.innerHTML = '';
-
-            if (history.length > 0) {
-                // Top 3 Chauds
-                mapped.slice(0, 3).forEach(item => {
-                    if(item.count > 0) {
-                        hotList.innerHTML += `<div class="hf-ball" ${getColorClass(item.num)}>${item.num}</div>`;
-                    }
-                });
-                // Top 3 Froids (parmi ceux qui sont le moins sortis)
-                let reverseMapped = [...mapped].reverse();
-                reverseMapped.slice(0, 3).forEach(item => {
-                    coldList.innerHTML += `<div class="hf-ball" ${getColorClass(item.num)}>${item.num}</div>`;
-                });
-            } else {
-                hotList.innerText = '-';
-                coldList.innerText = '-';
-            }
+            updatePercentBar('even', 'odd', even, odd, total);
+            updatePercentBar('manque', 'passe', manque, passe, total);
         }
+
+        function updateStatBar(id, count, total) {
+            const percent = Math.round((count / total) * 100);
+            document.getElementById(`percent-${id}`).textContent = `${percent}%`;
+            document.getElementById(`bar-${id}`).style.width = `${percent}%`;
+        }
+
+        function updatePercentBar(id1, id2, count1, count2, total) {
+            const percent1 = Math.round((count1 / total) * 100);
+            const percent2 = Math.round((count2 / total) * 100);
+            
+            document.getElementById(`percent-${id1}`).textContent = `${percent1}%`;
+            document.getElementById(`percent-${id2}`).textContent = `${percent2}%`;
+            
+            document.getElementById(`bar-${id1}`).style.width = `${percent1}%`;
+            document.getElementById(`bar-${id2}`).style.width = `${percent2}%`;
+        }
+
+        function resetStatBars() {
+            const elements = ['percent-red', 'percent-black', 'percent-even', 'percent-odd', 'percent-manque', 'percent-passe'];
+            const bars = ['bar-red', 'bar-black', 'bar-even', 'bar-odd', 'bar-manque', 'bar-passe'];
+            
+            elements.forEach(id => document.getElementById(id).textContent = '0%');
+            bars.forEach(id => document.getElementById(id).style.width = '0%');
+        }
+
+        function updateHotCold() {
+            if (history.length < 5) {
+                document.getElementById('hotNumbers').textContent = '-';
+                document.getElementById('coldNumbers').textContent = '-';
+                return;
+            }
+
+            // Crée une liste d'objets {numéro, compte}
+            let counts = numberCounts.map((count, num) => ({ num, count }));
+            
+            // Trie par compte décroissant pour les HOT
+            let sortedHot = [...counts].sort((a, b) => b.count - a.count);
+            let hotNums = sortedHot.slice(0, 3).filter(x => x.count > 0).map(x => x.num).join(', ');
+            
+            // Trie par compte croissant pour les COLD
+            let sortedCold = [...counts].sort((a, b) => a.count - b.count);
+            let coldNums = sortedCold.slice(0, 3).map(x => x.num).join(', ');
+
+            document.getElementById('hotNumbers').textContent = hotNums || '-';
+            document.getElementById('coldNumbers').textContent = coldNums;
+        }
+
+        init();
     </script>
 </body>
 </html>
