@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Roulette Stats Dashboard</title>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --panel-bg: #161f32;
+            --accent-gold: #d4af37;
+            --roulette-red: #e63946;
+            --roulette-black: #1d1d1f;
+            --roulette-green: #2a9d8f;
+            --text-main: #f8f9fa;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        /* Panneau Gauche : Saisie et Clavier */
+        .left-panel {
+            flex: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .header {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* Grille des numéros style tapis/clavier */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            flex-grow: 1;
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        .zero-btn {
+            grid-column: span 3;
+            background-color: var(--roulette-green);
+        }
+
+        .num-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.05s ease, opacity 0.1s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            aspect-ratio: 4/3;
+        }
+
+        .num-btn:active {
+            transform: scale(0.95);
+            opacity: 0.8;
+        }
+
+        .red { background-color: var(--roulette-red); }
+        .black { background-color: var(--roulette-black); border: 1px solid #333; }
+
+        /* Panneau Droite : Historique et Stats */
+        .right-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding-bottom: 5px;
+        }
+
+        .history-box {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 12px;
+            height: 140px;
+        }
+
+        .history-list {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            height: 90px;
+            align-items: center;
+        }
+
+        .history-item {
+            min-width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+            animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+
+        .stats-box {
+            background: var(--panel-bg);
+            padding: 15px;
+            border-radius: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .stat-bars {
+            display: flex;
+            width: 60%;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #2c3e50;
+        }
+
+        .bar {
+            height: 100%;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        /* Chauds & Froids */
+        .hot-cold-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .hf-panel {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .hf-title {
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        .hf-title.hot { color: #ff4d4d; }
+        .hf-title.cold { color: #4da6ff; }
+
+        .hf-list {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .hf-ball {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px;
+            background: #2c3e50;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-action:active { opacity: 0.8; }
+    </style>
+</head>
+<body>
+
+    <!-- PANNEAU GAUCHE : CLAVIER DE SAISIE -->
+    <div class="left-panel">
+        <div class="header">
+            <h1>Tableau de Bord Roulette</h1>
+        </div>
+        <div class="keypad" id="keypad">
+            <button class="num-btn zero-btn" onclick="addNumber(0)">0</button>
+            <!-- Généré dynamiquement en JS pour respecter les vraies couleurs de la roulette -->
+        </div>
+    </div>
+
+    <!-- PANNEAU DROITE : HISTORIQUE & STATS -->
+    <div class="right-panel">
+        <div class="history-box">
+            <div class="panel-title">Derniers numéros tombés</div>
+            <div class="history-list" id="historyList">
+                <!-- Numéros récents -->
+            </div>
+        </div>
+
+        <div class="stats-box">
+            <div class="panel-title">Statistiques en Temps Réel</div>
+            
+            <!-- ROUGE / NOIR -->
+            <div class="stat-row">
+                <span>Rouge / Noir</span>
+                <div class="stat-bars">
+                    <div id="bar-red" class="bar" style="background-color: var(--roulette-red); width: 50%;">0%</div>
+                    <div id="bar-black" class="bar" style="background-color: var(--roulette-black); width: 50%;">0%</div>
+                </div>
+            </div>
+
+            <!-- PAIR / IMPAIR -->
+            <div class="stat-row">
+                <span>Pair / Impair</span>
+                <div class="stat-bars">
+                    <div id="bar-even" class="bar" style="background-color: #34495e; width: 50%;">0%</div>
+                    <div id="bar-odd" class="bar" style="background-color: #7f8c8d; width: 50%;">0%</div>
+                </div>
+            </div>
+
+            <!-- MANQUE / PASSE -->
+            <div class="stat-row">
+                <span>1-18 / 19-36</span>
+                <div class="stat-bars">
+                    <div id="bar-low" class="bar" style="background-color: #16a085; width: 50%;">0%</div>
+                    <div id="bar-high" class="bar" style="background-color: #2980b9; width: 50%;">0%</div>
+                </div>
+            </div>
+
+            <!-- CHAUDS ET FROIDS -->
+            <div class="hot-cold-container">
+                <div class="hf-panel">
+                    <div class="hf-title hot">🔥 CHAUDS (HOT)</div>
+                    <div class="hf-list" id="hot-list">-</div>
+                </div>
+                <div class="hf-panel">
+                    <div class="hf-title cold">❄️ FROIDS (COLD)</div>
+                    <div class="hf-list" id="cold-list">-</div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn-action" style="background-color: #c0392b;" onclick="undo()">Retour arrière</button>
+                <button class="btn-action" onclick="resetStats()">Effacer tout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Couleurs officielles de la roulette européenne
+        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        let history = [];
+        // Compteur global pour tous les numéros (0 à 36)
+        let counts = Array(37).fill(0);
+
+        // Initialisation du clavier numérique dans l'ordre du tapis
+        const keypad = document.getElementById('keypad');
+        for (let i = 1; i <= 36; i++) {
+            const btn = document.createElement('button');
+            btn.innerText = i;
+            btn.className = `num-btn ${redNumbers.includes(i) ? 'red' : 'black'}`;
+            btn.onclick = () => addNumber(i);
+            keypad.appendChild(btn);
+        }
+
+        function getColorClass(num) {
+            if (num === 0) return 'style="background-color: var(--roulette-green);"';
+            return redNumbers.includes(num) ? 'style="background-color: var(--roulette-red);"' : 'style="background-color: var(--roulette-black); border: 1px solid #333;"';
+        }
+
+        function addNumber(num) {
+            history.unshift(num); // Ajoute au début
+            counts[num]++;
+            updateUI();
+        }
+
+        function undo() {
+            if (history.length > 0) {
+                const removed = history.shift();
+                counts[removed]--;
+                updateUI();
+            }
+        }
+
+        function resetStats() {
+            if(confirm("Réinitialiser toutes les statistiques de la partie ?")) {
+                history = [];
+                counts = Array(37).fill(0);
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            // 1. Mise à jour de l'historique visuel
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            history.slice(0, 10).forEach(num => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `<span ${getColorClass(num)} class="history-item">${num}</span>`;
+                historyList.appendChild(item);
+            });
+
+            // Filter les zéros pour les stats simples (Rouge/Noir, etc.)
+            const noZeros = history.filter(n => n !== 0);
+            const totalSimple = noZeros.length;
+
+            if (totalSimple > 0) {
+                // Rouge vs Noir
+                const reds = noZeros.filter(n => redNumbers.includes(n)).length;
+                const redPct = Math.round((reds / totalSimple) * 100);
+                document.getElementById('bar-red').style.width = `${redPct}%`;
+                document.getElementById('bar-red').innerText = `${redPct}% R`;
+                document.getElementById('bar-black').style.width = `${100 - redPct}%`;
+                document.getElementById('bar-black').innerText = `${100 - redPct}% N`;
+
+                // Pair vs Impair
+                const evens = noZeros.filter(n => n % 2 === 0).length;
+                const evenPct = Math.round((evens / totalSimple) * 100);
+                document.getElementById('bar-even').style.width = `${evenPct}%`;
+                document.getElementById('bar-even').innerText = `${evenPct}% P`;
+                document.getElementById('bar-odd').style.width = `${100 - evenPct}%`;
+                document.getElementById('bar-odd').innerText = `${100 - evenPct}% I`;
+
+                // Manque vs Passe (1-18 vs 19-36)
+                const lows = noZeros.filter(n => n <= 18).length;
+                const lowPct = Math.round((lows / totalSimple) * 100);
+                document.getElementById('bar-low').style.width = `${lowPct}%`;
+                document.getElementById('bar-low').innerText = `${lowPct}% M`;
+                document.getElementById('bar-high').style.width = `${100 - lowPct}%`;
+                document.getElementById('bar-high').innerText = `${100 - lowPct}% P`;
+            } else {
+                // Reset barres à 50/50 si pas de data
+                document.querySelectorAll('.bar').forEach(b => {
+                    b.style.width = '50%';
+                    b.innerText = '0%';
+                });
+            }
+
+            // 2. Gestion des Chauds (Hot) et Froids (Cold)
+            // Crée un tableau d'objets [{num: 0, count: X}, ...]
+            let mapped = counts.map((count, num) => ({ num, count }));
+            
+            // Tri par occurrences
+            mapped.sort((a, b) => b.count - a.count);
+
+            const hotList = document.getElementById('hot-list');
+            const coldList = document.getElementById('cold-list');
+            hotList.innerHTML = '';
+            coldList.innerHTML = '';
+
+            if (history.length > 0) {
+                // Top 3 Chauds
+                mapped.slice(0, 3).forEach(item => {
+                    if(item.count > 0) {
+                        hotList.innerHTML += `<div class="hf-ball" ${getColorClass(item.num)}>${item.num}</div>`;
+                    }
+                });
+                // Top 3 Froids (parmi ceux qui sont le moins sortis)
+                let reverseMapped = [...mapped].reverse();
+                reverseMapped.slice(0, 3).forEach(item => {
+                    coldList.innerHTML += `<div class="hf-ball" ${getColorClass(item.num)}>${item.num}</div>`;
+                });
+            } else {
+                hotList.innerText = '-';
+                coldList.innerText = '-';
+            }
+        }
+    </script>
+</body>
+</html>
