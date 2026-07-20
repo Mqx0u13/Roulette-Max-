@@ -33,7 +33,7 @@
             overflow: hidden;
         }
 
-        /* --- EN-TÊTE COMPLET --- */
+        /* --- EN-TÊTE --- */
         header {
             background: linear-gradient(to bottom, #111, #000);
             padding: 12px 20px;
@@ -41,7 +41,7 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 2px solid #222;
-            height: 80px;
+            height: 75px;
             flex-shrink: 0;
         }
 
@@ -89,7 +89,7 @@
             letter-spacing: 1.5px;
         }
 
-        /* --- CONFIGURATION PANNEAUX --- */
+        /* --- MAIN LAYOUT --- */
         .main-layout {
             display: flex;
             flex: 1;
@@ -151,7 +151,7 @@
             visibility: hidden;
         }
 
-        /* --- VISUEL & TAPIS SAISIE (DROITE) --- */
+        /* --- CONTENU DROIT --- */
         .right-content {
             width: 70%;
             display: flex;
@@ -159,14 +159,131 @@
             overflow: hidden;
         }
 
-        /* --- SECTION CHAUDS & FROIDS --- */
+        /* --- CYLINDRE ANIMÉ DE FILANTE (EN HAUT) --- */
+        .roulette-ribbon-container {
+            height: 160px;
+            background: #000;
+            border-bottom: 3px solid #2d2d30;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .ribbon-viewport {
+            width: 360px; /* Largeur de 3 cases côte à côte */
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .ribbon-wheel-track {
+            display: flex;
+            align-items: center;
+            position: relative;
+            left: 0;
+            transition: left 0.6s cubic-bezier(0.1, 0.8, 0.2, 1);
+        }
+
+        .ribbon-pocket {
+            width: 110px;
+            height: 110px;
+            margin: 0 5px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: bold;
+            border: 2px solid #333;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
+            flex-shrink: 0;
+        }
+
+        .ribbon-pocket.active-pocket {
+            border: 4px solid #fff;
+            transform: scale(1.02);
+        }
+
+        .ball-overlay {
+            position: absolute;
+            bottom: 12px;
+            width: 28px;
+            height: 28px;
+            background: radial-gradient(circle at 30% 30%, #fff, #aaa);
+            border-radius: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.9), 0 0 6px #fff;
+            z-index: 10;
+        }
+
+        /* --- STATISTIQUES AGRANDIES --- */
+        .stats-section {
+            background-color: #0b0d13;
+            padding: 15px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex-shrink: 0;
+        }
+
+        .stat-row-label {
+            display: flex;
+            justify-content: space-between;
+            font-family: Arial, sans-serif;
+            font-size: 1.1rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #d1d5db;
+            padding: 0 5px;
+            margin-bottom: 4px;
+        }
+
+        .bar-wrapper {
+            height: 55px; /* Épaisseur renforcée comme sur l'image */
+            border: 3px solid #222;
+            display: flex;
+            overflow: hidden;
+            position: relative;
+            background-color: #111;
+            border-radius: 4px;
+        }
+
+        .bar-segment {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            transition: width 0.4s ease;
+        }
+
+        .bar-separator {
+            width: 10px;
+            background-color: #13b467;
+            height: 100%;
+            box-shadow: 0 0 12px #13b467;
+            transition: width 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        /* --- SECTION CHAUDS & FROIDS EN BAS DES STATS --- */
         .hot-cold-section {
-            padding: 10px 15px;
+            padding: 10px 20px;
             background: #0b0d13;
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            border-bottom: 1px solid #1f2937;
+            gap: 8px;
+            border-bottom: 2px solid #222;
             flex-shrink: 0;
         }
 
@@ -174,7 +291,6 @@
             display: flex;
             align-items: center;
             gap: 15px;
-            font-size: 1.2rem;
         }
 
         .hc-label {
@@ -189,94 +305,38 @@
         }
 
         .hc-ball {
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
-            border: 2px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.15);
             box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
         }
 
-        /* --- STATISTIQUES --- */
-        .stats-section {
-            background-color: #0b0d13;
-            padding: 10px 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            flex-shrink: 0;
-            border-bottom: 2px solid #222;
-        }
-
-        .stat-row-label {
-            display: flex;
-            justify-content: space-between;
-            font-family: Arial, sans-serif;
-            font-size: 0.9rem;
-            font-weight: bold;
-            letter-spacing: 1px;
-            color: #d1d5db;
-            padding: 0 4px;
-            margin-bottom: 2px;
-        }
-
-        .bar-wrapper {
-            height: 34px;
-            border: 2px solid #222;
-            display: flex;
-            overflow: hidden;
-            position: relative;
-            background-color: #111;
-        }
-
-        .bar-segment {
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            font-weight: bold;
-            transition: width 0.4s ease;
-        }
-
-        .bar-separator {
-            width: 8px;
-            background-color: #13b467;
-            height: 100%;
-            box-shadow: 0 0 10px #13b467;
-            transition: width 0.4s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1rem;
-            font-weight: bold;
-            color: white;
-        }
-
-        /* --- GRILLE DE SAISIE --- */
+        /* --- GRILLE DE SAISIE FIXE --- */
         .embedded-keypad {
             flex: 1;
             background-color: #0d0f14;
-            padding: 10px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 8px;
             overflow-y: auto;
         }
 
         .keypad-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
+            gap: 6px;
         }
 
         .key-btn {
-            height: 44px;
-            font-size: 1.2rem;
+            height: 46px;
+            font-size: 1.3rem;
             font-weight: bold;
             color: #fff;
             border: 2px solid rgba(255,255,255,0.05);
@@ -299,9 +359,9 @@
         }
 
         .ctrl-btn {
-            height: 40px;
+            height: 44px;
             font-family: Arial, sans-serif;
-            font-size: 0.95rem;
+            font-size: 1rem;
             font-weight: bold;
             color: #fff;
             border-radius: 6px;
@@ -312,39 +372,7 @@
             cursor: pointer;
         }
 
-        /* --- BLOC RÈGLES --- */
-        .table-rules-container {
-            background-color: #11141a;
-            border: 1px solid #222;
-            border-radius: 6px;
-            padding: 8px;
-            margin-top: 4px;
-            text-align: center;
-            font-family: Arial, sans-serif;
-        }
-
-        .rules-title {
-            font-size: 0.85rem;
-            font-weight: bold;
-            color: var(--text-gold);
-            letter-spacing: 1px;
-            margin-bottom: 4px;
-        }
-
-        .rules-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px;
-            font-size: 0.75rem;
-            color: #bbb;
-        }
-
-        .rules-item span {
-            color: #fff;
-            font-weight: bold;
-        }
-
-        /* --- PREVENTON --- */
+        /* --- PRÉVENTION --- */
         .prevention-banner {
             background-color: var(--warning-yellow);
             color: #000;
@@ -374,7 +402,7 @@
 </head>
 <body>
 
-    <!-- EN-TÊTE CORRIGÉ -->
+    <!-- HEADER -->
     <header>
         <div class="brand-logo">
             <span class="logo-e">E</span>
@@ -385,35 +413,31 @@
             <span>CROUPIER :</span><br>
             <span class="croupier-name">B. ETHAN</span>
         </div>
-        <div style="width: 140px;"></div> <!-- Équilibre visuel -->
+        <div style="width: 140px;"></div>
     </header>
 
     <div class="main-layout">
         
-        <!-- SIDEBAR GAUCHE : HISTORIQUE COMPLET COMPATIBLE ZÉRO -->
+        <!-- SIDEBAR GAUCHE (HISTORIQUE) -->
         <div class="left-sidebar">
             <div class="current-number-box" id="mainDisplayBox">-</div>
-            <div class="history-rows-container" id="historyContainer">
-                <!-- Saisie dynamique par JS -->
-            </div>
+            <div class="history-rows-container" id="historyContainer"></div>
         </div>
 
         <!-- CÔTÉ DROIT -->
         <div class="right-content">
             
-            <!-- SECTION CHAUDS & FROIDS DYNAMIQUE -->
-            <div class="hot-cold-section">
-                <div class="hc-row">
-                    <span class="hc-label">🔥</span>
-                    <div class="hc-numbers" id="hotNums"></div>
+            <!-- CYLINDRE VISUEL EN HAUT -->
+            <div class="roulette-ribbon-container">
+                <div class="ribbon-viewport">
+                    <div class="ribbon-wheel-track" id="wheelRibbon">
+                        <!-- Généré dynamiquement pour défilement -->
+                    </div>
                 </div>
-                <div class="hc-row">
-                    <span class="hc-label">❄️</span>
-                    <div class="hc-numbers" id="coldNums"></div>
-                </div>
+                <div class="ball-overlay"></div>
             </div>
 
-            <!-- SECTION STATISTIQUES REFAITE (ROUGE/NOIR & PAIR/IMPAIR) -->
+            <!-- SECTION STATISTIQUES ÉPAISSES -->
             <div class="stats-section">
                 <div>
                     <div class="stat-row-label">
@@ -442,41 +466,39 @@
                 </div>
             </div>
 
-            <!-- GRILLE DE SAISIE FIXE -->
-            <div class="embedded-keypad">
-                <div class="keypad-grid" id="gridButtons">
-                    <!-- Généré par JS -->
+            <!-- SECTION CHAUDS & FROIDS (SOUS LES STATS) -->
+            <div class="hot-cold-section">
+                <div class="hc-row">
+                    <span class="hc-label">🔥</span>
+                    <div class="hc-numbers" id="hotNums"></div>
                 </div>
+                <div class="hc-row">
+                    <span class="hc-label">❄️</span>
+                    <div class="hc-numbers" id="coldNums"></div>
+                </div>
+            </div>
+
+            <!-- GRILLE DE SAISIE RECENTRÉE -->
+            <div class="embedded-keypad">
+                <div class="keypad-grid" id="gridButtons"></div>
                 
                 <div class="keypad-controls">
                     <button class="ctrl-btn bg-dark-gray" onclick="undoLast()">Retour (Undo)</button>
                     <button class="ctrl-btn bg-dark-red" onclick="clearAll()">Effacer Tout</button>
                 </div>
-                
-                <!-- ZONE RÈGLES ET LIMITES DE LA TABLE 1 -->
-                <div class="table-rules-container">
-                    <div class="rules-title">RÈGLES DE LA ROULETTE — TABLE 1</div>
-                    <div class="rules-grid">
-                        <div class="rules-item">Mise Min : <span>2€</span></div>
-                        <div class="rules-item">Plein Max : <span>40€</span></div>
-                        <div class="rules-item">Cheval Max : <span>80€</span></div>
-                        <div class="rules-item">Transversale : <span>120€</span></div>
-                        <div class="rules-item">Carré : <span>160€</span></div>
-                        <div class="rules-item">Col./Douz. : <span>480€</span></div>
-                        <div class="rules-item" style="grid-column: span 3; margin-top: 2px;">Chances simples : <span>720€</span></div>
-                    </div>
-                </div>
             </div>
 
-            <!-- BANDEAU JAUNE DE PRÉVENTION -->
+            <!-- BANDEAU DE PRÉVENTION -->
             <div class="prevention-banner">
-                ⚠️ LES JEUX D'ARGENT ET DE HASARD PEUVENT ÊTRE DANGEREUX : PERTES D'ARGENT, CONFLITS FAMILIAUX, ADDICTION... RETROUVEZ NOS CONSEILS SUR JOUEURS-INFO-SERVICE.FR (09 74 75 13 13 - APPEL NON SURTAXÉ)
+                ⚠️ LES JEUX D'ARGENT ET DE HASARD PEUVENT ÊTRE DANGEREUX : PERTES D'ARGENT, CONFLITS FAMILIAUX, ADDICTION... RETROUVEZ NOS CONSEILS SUR JOUEURS-INFO-SERVICE.FR (09 74 75 13 13)
             </div>
 
         </div>
     </div>
 
     <script>
+        // Ordre réel complet du cylindre européen répliqué pour l'effet infini
+        const layoutOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
         const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
         let history = [];
 
@@ -492,6 +514,7 @@
 
         function init() {
             buildEmbeddedGrid();
+            buildStaticRibbon();
             updateDashboard();
         }
 
@@ -514,18 +537,61 @@
             }
         }
 
+        // Crée la bande initiale neutre du cylindre
+        function buildStaticRibbon() {
+            const ribbon = document.getElementById('wheelRibbon');
+            ribbon.style.transition = 'none';
+            ribbon.style.left = '0px';
+            ribbon.innerHTML = `
+                <div class="ribbon-pocket bg-black">-</div>
+                <div class="ribbon-pocket bg-green active-pocket">0</div>
+                <div class="ribbon-pocket bg-black">-</div>
+            `;
+        }
+
         function selectNumber(num) {
             history.push(num);
+            animateRibbonTo(num);
             updateDashboard();
+        }
+
+        // Animation de défilement rapide de droite à gauche
+        function animateRibbonTo(targetNum) {
+            const ribbon = document.getElementById('wheelRibbon');
+            const targetIdx = layoutOrder.indexOf(targetNum);
+            
+            // On extrait 8 numéros consécutifs du cylindre pour créer l'effet de défilement rapide
+            let htmlContent = '';
+            for (let i = 0; i < 7; i++) {
+                let currentIdx = (targetIdx + i) % 37;
+                let num = layoutOrder[currentIdx];
+                let activeClass = i === 0 ? 'active-pocket' : '';
+                htmlContent += `<div class="ribbon-pocket ${getButtonClass(num)} ${activeClass}">${num}</div>`;
+            }
+            
+            ribbon.style.transition = 'none';
+            ribbon.innerHTML = htmlContent;
+            
+            // Décale le ruban vers la droite instantanément, puis anime vers la gauche
+            ribbon.style.left = '400px';
+            
+            setTimeout(() => {
+                ribbon.style.transition = 'left 0.5s cubic-bezier(0.1, 0.7, 0.1, 1)';
+                ribbon.style.left = '0px';
+            }, 20);
         }
 
         function undoLast() {
             history.pop();
+            const last = history[history.length - 1];
+            if (last !== undefined) animateRibbonTo(last);
+            else buildStaticRibbon();
             updateDashboard();
         }
 
         function clearAll() {
             history = [];
+            buildStaticRibbon();
             updateDashboard();
         }
 
@@ -590,16 +656,12 @@
                 return;
             }
 
-            // Fréquence de tous les nombres possibles (0 à 36)
             const frequencies = Array.from({ length: 37 }, (_, i) => ({ num: i, count: 0 }));
             history.forEach(num => { frequencies[num].count++; });
 
-            // On ne prend que les numéros sortis au moins une fois pour le classement complet
             const activeSort = [...frequencies].filter(f => f.count > 0);
             
-            // Tri décroissant pour les chauds
             const hotSorted = [...activeSort].sort((a, b) => b.count - a.count || b.num - a.num);
-            // Tri croissant pour les froids
             const coldSorted = [...activeSort].sort((a, b) => a.count - b.count || a.num - b.num);
 
             hotContainer.innerHTML = hotSorted.slice(0, 4).map(f => 
@@ -652,7 +714,7 @@
             
             const sep1 = document.getElementById('sep-zero-1');
             if (pZero > 0) { sep1.style.width = `${pZero}%`; sep1.textContent = `${pZero}%`; } 
-            else { sep1.style.width = '8px'; sep1.textContent = ''; }
+            else { sep1.style.width = '10px'; sep1.textContent = ''; }
 
             document.getElementById('bar-odd').style.width = pOdd > 0 ? `${pOdd}%` : '0%';
             document.getElementById('bar-odd').textContent = `${pOdd}%`;
@@ -661,7 +723,7 @@
 
             const sep2 = document.getElementById('sep-zero-2');
             if (pZero > 0) { sep2.style.width = `${pZero}%`; sep2.textContent = `${pZero}%`; } 
-            else { sep2.style.width = '8px'; sep2.textContent = ''; }
+            else { sep2.style.width = '10px'; sep2.textContent = ''; }
         }
 
         window.onload = init;
