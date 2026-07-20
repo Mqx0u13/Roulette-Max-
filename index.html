@@ -108,7 +108,7 @@
         .history-rows-container {
             display: flex;
             flex-direction: column;
-            gap: 2px; /* Historique bien resserré verticalement */
+            gap: 2px;
             overflow-y: auto;
             flex: 1;
         }
@@ -118,7 +118,7 @@
             grid-template-columns: 1fr 1fr;
             width: 100%;
             align-items: center;
-            height: 38px; /* Hauteur fixe réduite pour tasser les lignes */
+            height: 38px;
         }
 
         .history-line.zero-line {
@@ -227,7 +227,7 @@
         }
 
         .bar-wrapper {
-            height: 75px; /* Statistiques très larges et imposantes */
+            height: 75px;
             border: 3px solid #222;
             display: flex;
             overflow: hidden;
@@ -241,7 +241,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.2rem; /* Chiffres très gros */
+            font-size: 2.2rem;
             font-weight: bold;
             transition: width 0.4s ease;
         }
@@ -290,13 +290,13 @@
         }
 
         .hc-ball {
-            width: 58px; /* Billes géantes proportionnelles aux stats */
+            width: 58px;
             height: 58px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem; /* Chiffres géants */
+            font-size: 1.8rem;
             font-weight: bold;
             border: 2px solid rgba(255,255,255,0.2);
             box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
@@ -373,7 +373,6 @@
 </head>
 <body>
 
-    <!-- HEADER SANS LOGO ET AVEC NUMÉRO DE TABLE -->
     <header>
         <div class="brand-logo">
             <span class="brand-name">CASINO COMPAN</span>
@@ -387,16 +386,13 @@
 
     <div class="main-layout">
         
-        <!-- SIDEBAR HISTORIQUE TASSE -->
         <div class="left-sidebar">
             <div class="current-number-box" id="mainDisplayBox">-</div>
             <div class="history-rows-container" id="historyContainer"></div>
         </div>
 
-        <!-- BLOC DROIT RECALIBRÉ -->
         <div class="right-content">
             
-            <!-- CYLINDRE VISUEL DYNAMIQUE -->
             <div class="roulette-ribbon-container">
                 <div class="ribbon-viewport">
                     <div class="ribbon-wheel-track" id="wheelRibbon"></div>
@@ -404,7 +400,6 @@
                 <div class="ball-overlay"></div>
             </div>
 
-            <!-- SECTION STATISTIQUES GÉANTES -->
             <div class="stats-section">
                 <div>
                     <div class="stat-row-label">
@@ -433,7 +428,6 @@
                 </div>
             </div>
 
-            <!-- SECTION CHAUDS & FROIDS PLACÉE EN DESSOUS ET GÉANTE -->
             <div class="hot-cold-section">
                 <div class="hc-row">
                     <span class="hc-label">🔥</span>
@@ -445,7 +439,6 @@
                 </div>
             </div>
 
-            <!-- CLAVIER DE CONTROLE SANS MESSAGE DE PRÉVENTION -->
             <div class="embedded-keypad">
                 <div class="keypad-grid" id="gridButtons"></div>
                 
@@ -459,18 +452,18 @@
     </div>
 
     <script>
-        const layoutOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
-        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
-        let history = [];
+        var layoutOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
+        var redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        var historyData = [];
 
         function getNumberColor(num) {
             if (num === 0) return 'green';
-            return redNumbers.includes(num) ? 'red' : 'black';
+            return redNumbers.indexOf(num) !== -1 ? 'red' : 'black';
         }
 
         function getButtonClass(num) {
             if (num === 0) return 'bg-green';
-            return redNumbers.includes(num) ? 'bg-red' : 'bg-black';
+            return redNumbers.indexOf(num) !== -1 ? 'bg-red' : 'bg-black';
         }
 
         function init() {
@@ -480,82 +473,80 @@
         }
 
         function buildEmbeddedGrid() {
-            const grid = document.getElementById('gridButtons');
+            var grid = document.getElementById('gridButtons');
             grid.innerHTML = '';
             
-            const btnZero = document.createElement('div');
+            var btnZero = document.createElement('div');
             btnZero.className = 'key-btn bg-green';
             btnZero.textContent = '0';
-            btnZero.onclick = () => selectNumber(0);
+            btnZero.onclick = function() { selectNumber(0); };
             grid.appendChild(btnZero);
 
-            for(let i = 1; i <= 36; i++) {
-                const btn = document.createElement('div');
-                btn.className = `key-btn ${getButtonClass(i)}`;
-                btn.textContent = i;
-                btn.onclick = () => selectNumber(i);
-                grid.appendChild(btn);
+            for(var i = 1; i <= 36; i++) {
+                (function(num) {
+                    var btn = document.createElement('div');
+                    btn.className = 'key-btn ' + getButtonClass(num);
+                    btn.textContent = num;
+                    btn.onclick = function() { selectNumber(num); };
+                    grid.appendChild(btn);
+                })(i);
             }
         }
 
         function buildStaticRibbon() {
-            const ribbon = document.getElementById('wheelRibbon');
+            var ribbon = document.getElementById('wheelRibbon');
             ribbon.style.transition = 'none';
             ribbon.style.left = '0px';
-            ribbon.innerHTML = `
-                <div class="ribbon-pocket bg-black">-</div>
-                <div class="ribbon-pocket bg-green active-pocket">0</div>
-                <div class="ribbon-pocket bg-black">-</div>
-            `;
+            ribbon.innerHTML = '<div class="ribbon-pocket bg-black">-</div><div class="ribbon-pocket bg-green active-pocket">0</div><div class="ribbon-pocket bg-black">-</div>';
         }
 
         function selectNumber(num) {
-            history.push(num);
+            historyData.push(num);
             animateRibbonTo(num);
             updateDashboard();
         }
 
         function animateRibbonTo(targetNum) {
-            const ribbon = document.getElementById('wheelRibbon');
-            const targetIdx = layoutOrder.indexOf(targetNum);
+            var ribbon = document.getElementById('wheelRibbon');
+            var targetIdx = layoutOrder.indexOf(targetNum);
             
-            let htmlContent = '';
-            for (let i = 0; i < 7; i++) {
-                let currentIdx = (targetIdx + i) % 37;
-                let num = layoutOrder[currentIdx];
-                let activeClass = i === 0 ? 'active-pocket' : '';
-                htmlContent += `<div class="ribbon-pocket ${getButtonClass(num)} ${activeClass}">${num}</div>`;
+            var htmlContent = '';
+            for (var i = 0; i < 7; i++) {
+                var currentIdx = (targetIdx + i) % 37;
+                var num = layoutOrder[currentIdx];
+                var activeClass = i === 0 ? 'active-pocket' : '';
+                htmlContent += '<div class="ribbon-pocket ' + getButtonClass(num) + ' ' + activeClass + '">' + num + '</div>';
             }
             
             ribbon.style.transition = 'none';
             ribbon.innerHTML = htmlContent;
             ribbon.style.left = '400px';
             
-            setTimeout(() => {
+            setTimeout(function() {
                 ribbon.style.transition = 'left 0.5s cubic-bezier(0.1, 0.7, 0.1, 1)';
                 ribbon.style.left = '0px';
             }, 20);
         }
 
         function undoLast() {
-            history.pop();
-            const last = history[history.length - 1];
+            historyData.pop();
+            var last = historyData[historyData.length - 1];
             if (last !== undefined) animateRibbonTo(last);
             else buildStaticRibbon();
             updateDashboard();
         }
 
         function clearAll() {
-            history = [];
+            historyData = [];
             buildStaticRibbon();
             updateDashboard();
         }
 
         function updateDashboard() {
-            const mainBox = document.getElementById('mainDisplayBox');
+            var mainBox = document.getElementById('mainDisplayBox');
             
-            if (history.length > 0) {
-                const last = history[history.length - 1];
+            if (historyData.length > 0) {
+                var last = historyData[historyData.length - 1];
                 mainBox.textContent = last;
                 if(getNumberColor(last) === 'red') mainBox.style.color = 'var(--casino-red)';
                 else if(getNumberColor(last) === 'black') mainBox.style.color = '#ffffff';
@@ -571,63 +562,58 @@
         }
 
         function renderSplitHistory() {
-            const container = document.getElementById('historyContainer');
+            var container = document.getElementById('historyContainer');
             container.innerHTML = '';
-            const recent = [...history].reverse().slice(0, 11);
+            var recent = historyData.slice().reverse().slice(0, 11);
 
-            recent.forEach(num => {
+            recent.forEach(function(num) {
                 if (num === 0) {
-                    container.innerHTML += `
-                        <div class="history-line zero-line">
-                            <div class="hist-cell c-green">${num}</div>
-                        </div>`;
+                    container.innerHTML += '<div class="history-line zero-line"><div class="hist-cell c-green">' + num + '</div></div>';
                 } else {
-                    const color = getNumberColor(num);
+                    var color = getNumberColor(num);
                     if (color === 'red') {
-                        container.innerHTML += `
-                            <div class="history-line">
-                                <div class="hist-cell c-red">${num}</div>
-                                <div class="hist-cell empty">-</div>
-                            </div>`;
+                        container.innerHTML += '<div class="history-line"><div class="hist-cell c-red">' + num + '</div><div class="hist-cell empty">-</div></div>';
                     } else {
-                        container.innerHTML += `
-                            <div class="history-line">
-                                <div class="hist-cell empty">-</div>
-                                <div class="hist-cell c-black">${num}</div>
-                            </div>`;
+                        container.innerHTML += '<div class="history-line"><div class="hist-cell empty">-</div><div class="hist-cell c-black">' + num + '</div></div>';
                     }
                 }
             });
         }
 
         function updateHotCold() {
-            const hotContainer = document.getElementById('hotNums');
-            const coldContainer = document.getElementById('coldNums');
+            var hotContainer = document.getElementById('hotNums');
+            var coldContainer = document.getElementById('coldNums');
             
-            if (history.length === 0) {
+            if (historyData.length === 0) {
                 hotContainer.innerHTML = '<span style="color:#555; font-size:1.1rem;">En attente...</span>';
                 coldContainer.innerHTML = '<span style="color:#555; font-size:1.1rem;">En attente...</span>';
                 return;
             }
 
-            const frequencies = Array.from({ length: 37 }, (_, i) => ({ num: i, count: 0 }));
-            history.forEach(num => { frequencies[num].count++; });
+            var frequencies = [];
+            for (var i = 0; i < 37; i++) { frequencies.push({ num: i, count: 0 }); }
+            historyData.forEach(function(num) { frequencies[num].count++; });
 
-            const activeSort = [...frequencies].filter(f => f.count > 0);
-            const hotSorted = [...activeSort].sort((a, b) => b.count - a.count || b.num - a.num);
-            const coldSorted = [...activeSort].sort((a, b) => a.count - b.count || a.num - b.num);
+            var activeSort = frequencies.filter(function(f) { return f.count > 0; });
+            
+            var hotSorted = activeSort.slice().sort(function(a, b) { 
+                return b.count - a.count || b.num - a.num; 
+            });
+            var coldSorted = activeSort.slice().sort(function(a, b) { 
+                return a.count - b.count || a.num - b.num; 
+            });
 
-            hotContainer.innerHTML = hotSorted.slice(0, 4).map(f => 
-                `<div class="hc-ball ${getButtonClass(f.num)}">${f.num}</div>`
-            ).join('');
+            hotContainer.innerHTML = hotSorted.slice(0, 4).map(function(f) { 
+                return '<div class="hc-ball ' + getButtonClass(f.num) + '">' + f.num + '</div>';
+            }).join('');
 
-            coldContainer.innerHTML = coldSorted.slice(0, 4).map(f => 
-                `<div class="hc-ball ${getButtonClass(f.num)}">${f.num}</div>`
-            ).join('');
+            coldContainer.innerHTML = coldSorted.slice(0, 4).map(function(f) { 
+                return '<div class="hc-ball ' + getButtonClass(f.num) + '">' + f.num + '</div>';
+            }).join('');
         }
 
         function calculateStats() {
-            const total = history.length;
+            var total = historyData.length;
             
             if (total === 0) {
                 document.getElementById('bar-red').style.width = "46%"; document.getElementById('bar-red').textContent = "0%";
@@ -640,38 +626,38 @@
                 return;
             }
 
-            let red = 0, black = 0, zero = 0, odd = 0, even = 0;
+            var red = 0, black = 0, zero = 0, odd = 0, even = 0;
 
-            history.forEach(num => {
+            historyData.forEach(function(num) {
                 if (num === 0) { zero++; } 
                 else {
-                    if (redNumbers.includes(num)) red++; else black++;
+                    if (redNumbers.indexOf(num) !== -1) red++; else black++;
                     if (num % 2 !== 0) odd++; else even++;
                 }
             });
 
-            const pRed = Math.round((red / total) * 100);
-            const pBlack = Math.round((black / total) * 100);
-            const pZero = Math.round((zero / total) * 100);
-            const pOdd = Math.round((odd / total) * 100);
-            const pEven = Math.round((even / total) * 100);
+            var pRed = Math.round((red / total) * 100);
+            var pBlack = Math.round((black / total) * 100);
+            var pZero = Math.round((zero / total) * 100);
+            var pOdd = Math.round((odd / total) * 100);
+            var pEven = Math.round((even / total) * 100);
 
-            document.getElementById('bar-red').style.width = pRed > 0 ? `${pRed}%` : '0%';
-            document.getElementById('bar-red').textContent = `${pRed}%`;
-            document.getElementById('bar-black').style.width = pBlack > 0 ? `${pBlack}%` : '0%';
-            document.getElementById('bar-black').textContent = `${pBlack}%`;
+            document.getElementById('bar-red').style.width = pRed > 0 ? pRed + '%' : '0%';
+            document.getElementById('bar-red').textContent = pRed + '%';
+            document.getElementById('bar-black').style.width = pBlack > 0 ? pBlack + '%' : '0%';
+            document.getElementById('bar-black').textContent = pBlack + '%';
             
-            const sep1 = document.getElementById('sep-zero-1');
-            if (pZero > 0) { sep1.style.width = `${pZero}%`; sep1.textContent = `${pZero}%`; } 
+            var sep1 = document.getElementById('sep-zero-1');
+            if (pZero > 0) { sep1.style.width = pZero + '%'; sep1.textContent = pZero + '%'; } 
             else { sep1.style.width = '10px'; sep1.textContent = ''; }
 
-            document.getElementById('bar-odd').style.width = pOdd > 0 ? `${pOdd}%` : '0%';
-            document.getElementById('bar-odd').textContent = `${pOdd}%`;
-            document.getElementById('bar-even').style.width = pEven > 0 ? `${pEven}%` : '0%';
-            document.getElementById('bar-even').textContent = `${pEven}%`;
+            document.getElementById('bar-odd').style.width = pOdd > 0 ? pOdd + '%' : '0%';
+            document.getElementById('bar-odd').textContent = pOdd + '%';
+            document.getElementById('bar-even').style.width = pEven > 0 ? pEven + '%' : '0%';
+            document.getElementById('bar-even').textContent = pEven + '%';
 
-            const sep2 = document.getElementById('sep-zero-2');
-            if (pZero > 0) { sep2.style.width = `${pZero}%`; sep2.textContent = `${pZero}%`; } 
+            var sep2 = document.getElementById('sep-zero-2');
+            if (pZero > 0) { sep2.style.width = pZero + '%'; sep2.textContent = pZero + '%'; } 
             else { sep2.style.width = '10px'; sep2.textContent = ''; }
         }
 
