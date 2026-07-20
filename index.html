@@ -6,8 +6,8 @@
     <title>Casino Compan - Live Board</title>
     <style>
         :root {
-            --bg-dark: #07090e;
-            --panel-texture: #141416;
+            --bg-dark: #000000; /* Noir OLED Absolu */
+            --panel-texture: #000000; /* Noir OLED Absolu */
             --casino-red: #d61c1c;
             --casino-black: #17181c;
             --casino-green: #0b9351;
@@ -34,12 +34,12 @@
 
         /* --- EN-TÊTE ÉPURÉ --- */
         header {
-            background: linear-gradient(to bottom, #111, #000);
+            background: #000000;
             padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #222;
+            border-bottom: 2px solid #1a1a1a;
             height: 75px;
             flex-shrink: 0;
         }
@@ -81,11 +81,11 @@
             overflow: hidden;
         }
 
-        /* --- HISTORIQUE COMPACT (GAUCHE) --- */
+        /* --- HISTORIQUE GÉANT (GAUCHE) --- */
         .left-sidebar {
             width: 30%;
             background-color: var(--panel-texture);
-            border-right: 3px solid #2d2d30;
+            border-right: 3px solid #1a1a1a;
             display: flex;
             flex-direction: column;
             padding: 10px;
@@ -93,13 +93,13 @@
         }
 
         .current-number-box {
-            background-color: #111317;
-            border: 3px solid #3a3a40;
+            background-color: #000000;
+            border: 3px solid #222222;
             height: 110px;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             flex-shrink: 0;
             font-size: 5.5rem;
             font-weight: bold;
@@ -109,10 +109,10 @@
         .history-rows-container {
             display: flex;
             flex-direction: column;
-            gap: 2px;
+            gap: 8px; /* Plus d'espace entre les gros chiffres */
             overflow-y: auto;
             flex: 1;
-            padding-bottom: 20px; /* Permet de respirer tout en bas */
+            padding-bottom: 30px;
         }
 
         .history-line {
@@ -120,7 +120,7 @@
             grid-template-columns: 1fr 1fr;
             width: 100%;
             align-items: center;
-            height: 38px;
+            height: 55px; /* Plus haut pour accueillir les gros chiffres */
             flex-shrink: 0;
         }
 
@@ -130,7 +130,7 @@
         }
 
         .hist-cell {
-            font-size: 2.3rem;
+            font-size: 3.5rem; /* Augmenté de 2.3rem à 3.5rem pour remplir l'espace */
             font-weight: bold;
             text-align: center;
             line-height: 1;
@@ -146,13 +146,14 @@
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            background-color: #000000;
         }
 
         /* --- CYLINDRE INFRA-ROUGE EN HAUT --- */
         .roulette-ribbon-container {
             height: 150px;
-            background: #000;
-            border-bottom: 3px solid #2d2d30;
+            background: #000000;
+            border-bottom: 3px solid #1a1a1a;
             position: relative;
             display: flex;
             justify-content: center;
@@ -186,7 +187,7 @@
             justify-content: center;
             font-size: 3.5rem;
             font-weight: bold;
-            border: 2px solid #333;
+            border: 2px solid #222;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
             flex-shrink: 0;
         }
@@ -209,7 +210,7 @@
 
         /* --- STATISTIQUES GÉANTES --- */
         .stats-section {
-            background-color: #0b0d13;
+            background-color: #000000;
             padding: 15px 20px;
             display: flex;
             flex-direction: column;
@@ -235,7 +236,7 @@
             display: flex;
             overflow: hidden;
             position: relative;
-            background-color: #111;
+            background-color: #000000;
             border-radius: 6px;
         }
 
@@ -264,51 +265,56 @@
             flex-shrink: 0;
         }
 
-        /* --- CHAUDS & FROIDS GÉANTS --- */
+        /* --- CHAUDS & FROIDS GÉANTS ET CENTRÉS --- */
         .hot-cold-section {
-            padding: 15px 20px;
-            background: #0b0d13;
+            padding: 20px 20px;
+            background: #000000;
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            border-bottom: 3px solid #222;
+            gap: 15px;
+            border-bottom: 3px solid #1a1a1a;
             flex-shrink: 0;
+            align-items: center; /* Centre tout le bloc */
         }
 
         .hc-row {
             display: flex;
             align-items: center;
-            gap: 20px;
+            justify-content: center;
+            width: 100%; /* Prend toute la largeur */
+            gap: 25px;
         }
 
         .hc-label {
-            font-size: 2rem;
-            width: 40px;
+            font-size: 2.5rem; /* Plus gros émoji */
+            width: 50px;
             text-align: center;
         }
 
         .hc-numbers {
             display: flex;
-            gap: 12px;
+            gap: 15px;
+            justify-content: center;
+            flex: 1; /* Permet d'occuper l'espace disponible */
         }
 
         .hc-ball {
-            width: 58px;
-            height: 58px;
+            width: 75px; /* Augmenté de 58px à 75px */
+            height: 75px; /* Augmenté de 58px à 75px */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2.3rem; /* Chiffres à l'intérieur beaucoup plus gros */
             font-weight: bold;
             border: 2px solid rgba(255,255,255,0.2);
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
         }
 
         /* --- CLAVIER NUMÉRIQUE DE SAISIE --- */
         .embedded-keypad {
             flex: 1;
-            background-color: #0d0f14;
+            background-color: #000000;
             padding: 15px;
             display: flex;
             flex-direction: column;
@@ -568,7 +574,6 @@
             var container = document.getElementById('historyContainer');
             container.innerHTML = '';
             
-            // On inverse pour afficher le plus récent en haut, sans limite stricte pour remplir l'écran
             var recent = historyData.slice().reverse();
 
             recent.forEach(function(num) {
@@ -584,7 +589,6 @@
                 }
             });
 
-            // Auto-scroll vers le haut de la liste pour voir le dernier sorti immédiatement
             container.scrollTop = 0;
         }
 
@@ -593,8 +597,8 @@
             var coldContainer = document.getElementById('coldNums');
             
             if (historyData.length === 0) {
-                hotContainer.innerHTML = '<span style="color:#555; font-size:1.1rem;">En attente...</span>';
-                coldContainer.innerHTML = '<span style="color:#555; font-size:1.1rem;">En attente...</span>';
+                hotContainer.innerHTML = '<span style="color:#555; font-size:1.4rem;">En attente...</span>';
+                coldContainer.innerHTML = '<span style="color:#555; font-size:1.4rem;">En attente...</span>';
                 return;
             }
 
