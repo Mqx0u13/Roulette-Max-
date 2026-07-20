@@ -12,7 +12,6 @@
             --casino-black: #17181c;
             --casino-green: #0b9351;
             --text-gold: #d4af37;
-            --warning-yellow: #facc15;
         }
 
         * {
@@ -33,10 +32,10 @@
             overflow: hidden;
         }
 
-        /* --- EN-TÊTE --- */
+        /* --- EN-TÊTE ÉPURÉ --- */
         header {
             background: linear-gradient(to bottom, #111, #000);
-            padding: 12px 20px;
+            padding: 12px 25px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -45,33 +44,12 @@
             flex-shrink: 0;
         }
 
-        .brand-logo {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-        }
-
-        .logo-e {
-            color: var(--text-gold);
+        .brand-logo .brand-name {
             font-size: 1.8rem;
-            font-family: 'Times New Roman', serif;
+            letter-spacing: 2px;
             font-weight: bold;
-            text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
-        }
-
-        .brand-name {
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .sub-brand {
-            font-size: 0.85rem;
-            font-family: Arial, sans-serif;
             color: var(--text-gold);
-            letter-spacing: 1px;
-            margin-top: 2px;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
         }
 
         .croupier-box {
@@ -85,18 +63,25 @@
         .croupier-name {
             color: #fff;
             font-family: 'Impact', sans-serif;
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             letter-spacing: 1.5px;
         }
 
-        /* --- MAIN LAYOUT --- */
+        .table-badge {
+            color: var(--text-gold);
+            font-size: 1.6rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* --- LAYOUT GLOBAL --- */
         .main-layout {
             display: flex;
             flex: 1;
             overflow: hidden;
         }
 
-        /* --- HISTORIQUE (GAUCHE) --- */
+        /* --- HISTORIQUE COMPACT (GAUCHE) --- */
         .left-sidebar {
             width: 30%;
             background-color: var(--panel-texture);
@@ -113,7 +98,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             flex-shrink: 0;
             font-size: 5.5rem;
             font-weight: bold;
@@ -123,7 +108,7 @@
         .history-rows-container {
             display: flex;
             flex-direction: column;
-            gap: 6px;
+            gap: 2px; /* Historique bien resserré verticalement */
             overflow-y: auto;
             flex: 1;
         }
@@ -133,6 +118,7 @@
             grid-template-columns: 1fr 1fr;
             width: 100%;
             align-items: center;
+            height: 38px; /* Hauteur fixe réduite pour tasser les lignes */
         }
 
         .history-line.zero-line {
@@ -151,7 +137,7 @@
             visibility: hidden;
         }
 
-        /* --- CONTENU DROIT --- */
+        /* --- CONTENU VISUEL & ACTIONS (DROITE) --- */
         .right-content {
             width: 70%;
             display: flex;
@@ -159,9 +145,9 @@
             overflow: hidden;
         }
 
-        /* --- CYLINDRE ANIMÉ DE FILANTE (EN HAUT) --- */
+        /* --- CYLINDRE INFRA-ROUGE EN HAUT --- */
         .roulette-ribbon-container {
-            height: 160px;
+            height: 150px;
             background: #000;
             border-bottom: 3px solid #2d2d30;
             position: relative;
@@ -173,7 +159,7 @@
         }
 
         .ribbon-viewport {
-            width: 360px; /* Largeur de 3 cases côte à côte */
+            width: 360px;
             overflow: hidden;
             position: relative;
             display: flex;
@@ -185,7 +171,6 @@
             align-items: center;
             position: relative;
             left: 0;
-            transition: left 0.6s cubic-bezier(0.1, 0.8, 0.2, 1);
         }
 
         .ribbon-pocket {
@@ -210,7 +195,7 @@
 
         .ball-overlay {
             position: absolute;
-            bottom: 12px;
+            bottom: 10px;
             width: 28px;
             height: 28px;
             background: radial-gradient(circle at 30% 30%, #fff, #aaa);
@@ -219,7 +204,7 @@
             z-index: 10;
         }
 
-        /* --- STATISTIQUES AGRANDIES --- */
+        /* --- STATISTIQUES GÉANTES --- */
         .stats-section {
             background-color: #0b0d13;
             padding: 15px 20px;
@@ -233,22 +218,22 @@
             display: flex;
             justify-content: space-between;
             font-family: Arial, sans-serif;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: bold;
             letter-spacing: 2px;
             color: #d1d5db;
             padding: 0 5px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .bar-wrapper {
-            height: 55px; /* Épaisseur renforcée comme sur l'image */
+            height: 75px; /* Statistiques très larges et imposantes */
             border: 3px solid #222;
             display: flex;
             overflow: hidden;
             position: relative;
             background-color: #111;
-            border-radius: 4px;
+            border-radius: 6px;
         }
 
         .bar-segment {
@@ -256,7 +241,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-size: 2.2rem; /* Chiffres très gros */
             font-weight: bold;
             transition: width 0.4s ease;
         }
@@ -265,66 +250,66 @@
             width: 10px;
             background-color: #13b467;
             height: 100%;
-            box-shadow: 0 0 12px #13b467;
+            box-shadow: 0 0 15px #13b467;
             transition: width 0.4s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.4rem;
             font-weight: bold;
             color: white;
             flex-shrink: 0;
         }
 
-        /* --- SECTION CHAUDS & FROIDS EN BAS DES STATS --- */
+        /* --- CHAUDS & FROIDS GÉANTS --- */
         .hot-cold-section {
-            padding: 10px 20px;
+            padding: 15px 20px;
             background: #0b0d13;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            border-bottom: 2px solid #222;
+            gap: 12px;
+            border-bottom: 3px solid #222;
             flex-shrink: 0;
         }
 
         .hc-row {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
         }
 
         .hc-label {
-            font-size: 1.4rem;
-            width: 30px;
+            font-size: 2rem;
+            width: 40px;
             text-align: center;
         }
 
         .hc-numbers {
             display: flex;
-            gap: 8px;
+            gap: 12px;
         }
 
         .hc-ball {
-            width: 40px;
-            height: 40px;
+            width: 58px; /* Billes géantes proportionnelles aux stats */
+            height: 58px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1.8rem; /* Chiffres géants */
             font-weight: bold;
-            border: 2px solid rgba(255,255,255,0.15);
-            box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.2);
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.7);
         }
 
-        /* --- GRILLE DE SAISIE FIXE --- */
+        /* --- CLAVIER NUMÉRIQUE DE SAISIE --- */
         .embedded-keypad {
             flex: 1;
             background-color: #0d0f14;
-            padding: 12px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
             overflow-y: auto;
         }
 
@@ -335,8 +320,8 @@
         }
 
         .key-btn {
-            height: 46px;
-            font-size: 1.3rem;
+            height: 48px;
+            font-size: 1.4rem;
             font-weight: bold;
             color: #fff;
             border: 2px solid rgba(255,255,255,0.05);
@@ -354,14 +339,14 @@
         .keypad-controls {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 4px;
+            gap: 10px;
+            margin-top: 5px;
         }
 
         .ctrl-btn {
-            height: 44px;
+            height: 46px;
             font-family: Arial, sans-serif;
-            font-size: 1rem;
+            font-size: 1.05rem;
             font-weight: bold;
             color: #fff;
             border-radius: 6px;
@@ -372,21 +357,7 @@
             cursor: pointer;
         }
 
-        /* --- PRÉVENTION --- */
-        .prevention-banner {
-            background-color: var(--warning-yellow);
-            color: #000;
-            padding: 6px 12px;
-            font-family: Arial, sans-serif;
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-align: center;
-            border-top: 2px solid #b45309;
-            flex-shrink: 0;
-            line-height: 1.3;
-        }
-
-        /* Couleurs */
+        /* Couleurs Thématiques */
         .c-red { color: var(--casino-red); }
         .c-black { color: #ffffff; }
         .c-green { color: var(--casino-green); }
@@ -402,42 +373,38 @@
 </head>
 <body>
 
-    <!-- HEADER -->
+    <!-- HEADER SANS LOGO ET AVEC NUMÉRO DE TABLE -->
     <header>
         <div class="brand-logo">
-            <span class="logo-e">E</span>
             <span class="brand-name">CASINO COMPAN</span>
-            <span class="sub-brand">Ethan Casino</span>
         </div>
         <div class="croupier-box">
             <span>CROUPIER :</span><br>
             <span class="croupier-name">B. ETHAN</span>
         </div>
-        <div style="width: 140px;"></div>
+        <div class="table-badge">TABLE N°1</div>
     </header>
 
     <div class="main-layout">
         
-        <!-- SIDEBAR GAUCHE (HISTORIQUE) -->
+        <!-- SIDEBAR HISTORIQUE TASSE -->
         <div class="left-sidebar">
             <div class="current-number-box" id="mainDisplayBox">-</div>
             <div class="history-rows-container" id="historyContainer"></div>
         </div>
 
-        <!-- CÔTÉ DROIT -->
+        <!-- BLOC DROIT RECALIBRÉ -->
         <div class="right-content">
             
-            <!-- CYLINDRE VISUEL EN HAUT -->
+            <!-- CYLINDRE VISUEL DYNAMIQUE -->
             <div class="roulette-ribbon-container">
                 <div class="ribbon-viewport">
-                    <div class="ribbon-wheel-track" id="wheelRibbon">
-                        <!-- Généré dynamiquement pour défilement -->
-                    </div>
+                    <div class="ribbon-wheel-track" id="wheelRibbon"></div>
                 </div>
                 <div class="ball-overlay"></div>
             </div>
 
-            <!-- SECTION STATISTIQUES ÉPAISSES -->
+            <!-- SECTION STATISTIQUES GÉANTES -->
             <div class="stats-section">
                 <div>
                     <div class="stat-row-label">
@@ -466,7 +433,7 @@
                 </div>
             </div>
 
-            <!-- SECTION CHAUDS & FROIDS (SOUS LES STATS) -->
+            <!-- SECTION CHAUDS & FROIDS PLACÉE EN DESSOUS ET GÉANTE -->
             <div class="hot-cold-section">
                 <div class="hc-row">
                     <span class="hc-label">🔥</span>
@@ -478,7 +445,7 @@
                 </div>
             </div>
 
-            <!-- GRILLE DE SAISIE RECENTRÉE -->
+            <!-- CLAVIER DE CONTROLE SANS MESSAGE DE PRÉVENTION -->
             <div class="embedded-keypad">
                 <div class="keypad-grid" id="gridButtons"></div>
                 
@@ -488,16 +455,10 @@
                 </div>
             </div>
 
-            <!-- BANDEAU DE PRÉVENTION -->
-            <div class="prevention-banner">
-                ⚠️ LES JEUX D'ARGENT ET DE HASARD PEUVENT ÊTRE DANGEREUX : PERTES D'ARGENT, CONFLITS FAMILIAUX, ADDICTION... RETROUVEZ NOS CONSEILS SUR JOUEURS-INFO-SERVICE.FR (09 74 75 13 13)
-            </div>
-
         </div>
     </div>
 
     <script>
-        // Ordre réel complet du cylindre européen répliqué pour l'effet infini
         const layoutOrder = [0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30, 8, 23, 10, 5, 24, 16, 33, 1, 20, 14, 31, 9, 22, 18, 29, 7, 28, 12, 35, 3, 26];
         const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
         let history = [];
@@ -537,7 +498,6 @@
             }
         }
 
-        // Crée la bande initiale neutre du cylindre
         function buildStaticRibbon() {
             const ribbon = document.getElementById('wheelRibbon');
             ribbon.style.transition = 'none';
@@ -555,12 +515,10 @@
             updateDashboard();
         }
 
-        // Animation de défilement rapide de droite à gauche
         function animateRibbonTo(targetNum) {
             const ribbon = document.getElementById('wheelRibbon');
             const targetIdx = layoutOrder.indexOf(targetNum);
             
-            // On extrait 8 numéros consécutifs du cylindre pour créer l'effet de défilement rapide
             let htmlContent = '';
             for (let i = 0; i < 7; i++) {
                 let currentIdx = (targetIdx + i) % 37;
@@ -571,8 +529,6 @@
             
             ribbon.style.transition = 'none';
             ribbon.innerHTML = htmlContent;
-            
-            // Décale le ruban vers la droite instantanément, puis anime vers la gauche
             ribbon.style.left = '400px';
             
             setTimeout(() => {
@@ -601,7 +557,6 @@
             if (history.length > 0) {
                 const last = history[history.length - 1];
                 mainBox.textContent = last;
-                
                 if(getNumberColor(last) === 'red') mainBox.style.color = 'var(--casino-red)';
                 else if(getNumberColor(last) === 'black') mainBox.style.color = '#ffffff';
                 else mainBox.style.color = 'var(--casino-green)';
@@ -618,8 +573,7 @@
         function renderSplitHistory() {
             const container = document.getElementById('historyContainer');
             container.innerHTML = '';
-
-            const recent = [...history].reverse().slice(0, 10);
+            const recent = [...history].reverse().slice(0, 11);
 
             recent.forEach(num => {
                 if (num === 0) {
@@ -651,8 +605,8 @@
             const coldContainer = document.getElementById('coldNums');
             
             if (history.length === 0) {
-                hotContainer.innerHTML = '<span style="color:#555; font-size:0.9rem; font-family:sans-serif;">En attente...</span>';
-                coldContainer.innerHTML = '<span style="color:#555; font-size:0.9rem; font-family:sans-serif;">En attente...</span>';
+                hotContainer.innerHTML = '<span style="color:#555; font-size:1.1rem;">En attente...</span>';
+                coldContainer.innerHTML = '<span style="color:#555; font-size:1.1rem;">En attente...</span>';
                 return;
             }
 
@@ -660,7 +614,6 @@
             history.forEach(num => { frequencies[num].count++; });
 
             const activeSort = [...frequencies].filter(f => f.count > 0);
-            
             const hotSorted = [...activeSort].sort((a, b) => b.count - a.count || b.num - a.num);
             const coldSorted = [...activeSort].sort((a, b) => a.count - b.count || a.num - b.num);
 
@@ -690,14 +643,10 @@
             let red = 0, black = 0, zero = 0, odd = 0, even = 0;
 
             history.forEach(num => {
-                if (num === 0) {
-                    zero++;
-                } else {
-                    if (redNumbers.includes(num)) red++;
-                    else black++;
-
-                    if (num % 2 !== 0) odd++;
-                    else even++;
+                if (num === 0) { zero++; } 
+                else {
+                    if (redNumbers.includes(num)) red++; else black++;
+                    if (num % 2 !== 0) odd++; else even++;
                 }
             });
 
