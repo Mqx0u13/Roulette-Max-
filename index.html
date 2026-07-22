@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Casino Compan - Live Board 27" Vertical</title>
+    <title>Casino Roulette - Historique et Statistiques</title>
     <style>
         :root {
             --bg-dark: #000000; /* Noir OLED Absolu */
@@ -58,13 +58,30 @@
             font-size: 1.4rem;
             color: #ddd;
             font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
 
-        .croupier-name {
-            color: #fff;
+        .croupier-input {
+            background-color: #111113;
+            border: 2px solid var(--text-gold);
+            color: #ffffff;
             font-family: 'Impact', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             letter-spacing: 2px;
+            text-align: center;
+            border-radius: 8px;
+            padding: 2px 15px;
+            width: 250px;
+            outline: none;
+            user-select: text;
+            -webkit-user-select: text;
+        }
+
+        .croupier-input:focus {
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
         }
 
         .table-badge {
@@ -444,11 +461,11 @@
 
     <header>
         <div class="brand-logo">
-            <span class="brand-name">CASINO COMPAN</span>
+            <span class="brand-name">CASINO</span>
         </div>
         <div class="croupier-box">
-            <span>CROUPIER :</span><br>
-            <span class="croupier-name">B. ETHAN</span>
+            <span>CROUPIER :</span>
+            <input type="text" class="croupier-input" value="B. ETHAN" placeholder="Nom du croupier">
         </div>
         <div class="table-badge">TABLE N°1</div>
     </header>
