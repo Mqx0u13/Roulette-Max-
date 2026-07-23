@@ -5,218 +5,501 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roulette Dashboard</title>
     <style>
-        body {
-            font-family: sans-serif;
+        * {
+            box-sizing: border-box;
             margin: 0;
-            background-image: url('image_11.png'); /* Image de fond (votre screenshot) */
-            background-size: cover;
-            background-repeat: no-repeat;
-            color: white;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
         }
 
-        /* --- En-tête --- */
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* --- COLONNE HISTORIQUE (GAUCHE) --- */
+        .history-column {
+            width: 220px;
+            background-color: #18181b;
+            border-right: 2px solid #27272a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 10px;
+            overflow-y: hidden;
+            position: relative;
+        }
+
+        .latest-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            width: 100%;
+            align-items: center;
+            overflow-y: auto;
+            max-height: calc(100vh - 120px);
+        }
+
+        .history-item {
+            font-size: 1.5rem;
+            font-weight: 700;
+            width: 60px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 6px;
+        }
+
+        /* --- SECTION PRINCIPALE (DROITE) --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 20px;
+            max-width: 900px;
+        }
+
+        /* En-tête */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.8); /* Fond sombre pour l'en-tête */
+            background-color: #18181b;
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid #27272a;
         }
 
         .logo-partouche {
-            height: 50px;
-            margin-right: 20px;
+            height: 45px;
+            object-fit: contain;
         }
 
-        .mises-container {
+        .mises-info {
+            text-align: center;
+        }
+
+        .mises-info div {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .table-id {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #ffffff;
+            letter-spacing: 1px;
+        }
+
+        /* Derniers tirages rapides */
+        .recent-bar {
             display: flex;
-            flex-direction: column;
-            align-items: center;
+            gap: 12px;
+            justify-content: center;
+            background-color: #18181b;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #27272a;
         }
 
-        .mise-min-max {
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        .table-info {
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        /* --- Tableau des numéros --- */
-        .numbers-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 5px;
-            padding: 20px;
-            justify-items: center;
-        }
-
-        .number-box {
-            width: 40px;
-            height: 40px;
-            border: 2px solid white;
+        .recent-badge {
+            width: 45px;
+            height: 45px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-weight: 800;
             font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
         }
 
-        .number-box.red {
-            background-color: #ff0000;
-        }
-
-        .number-box.black {
-            background-color: #000000;
-        }
-
-        .number-box.green {
-            background-color: #00ff00;
-        }
-
-        /* --- Zone de texte et boutons --- */
-        .input-container {
-            display: flex;
-            align-items: center;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        }
-
-        .result-input {
-            width: 50px;
-            height: 40px;
-            border: 2px solid white;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-align: center;
-            margin-right: 10px;
-        }
-
-        .effacer-tout-btn, .retour-undo-btn {
-            padding: 10px 20px;
-            border: 2px solid white;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            margin-right: 10px;
-        }
-
-        .effacer-tout-btn {
-            background-color: #ff0000;
-        }
-
-        .retour-undo-btn {
-            background-color: #0000ff;
-        }
-
-        /* --- Conteneur principal --- */
-        .main-container {
-            padding-right: 20px;
+        /* Graphiques & Statistiques */
+        .stats-container {
+            background-color: #18181b;
+            padding: 15px 20px;
+            border-radius: 10px;
+            border: 1px solid #27272a;
             display: flex;
             flex-direction: column;
-            align-items: flex-end;
+            gap: 12px;
         }
+
+        .stat-bar-wrapper {
+            display: flex;
+            height: 28px;
+            border-radius: 6px;
+            overflow: hidden;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .stat-part {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: width 0.3s ease;
+        }
+
+        .stat-red { background-color: #dc2626; }
+        .stat-black { background-color: #18181b; border: 1px solid #3f3f46; }
+        .stat-green { background-color: #16a34a; }
+        .stat-even { background-color: #2563eb; }
+        .stat-odd { background-color: #d97706; }
+
+        /* Chauds / Froids */
+        .hot-cold-container {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            background-color: #18181b;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid #27272a;
+        }
+
+        .hot-cold-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .hot-cold-icon {
+            font-size: 1.4rem;
+        }
+
+        /* Grille des numéros */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            background-color: #18181b;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #27272a;
+        }
+
+        .btn-num {
+            height: 50px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            border: none;
+            color: white;
+            transition: transform 0.1s, opacity 0.1s;
+        }
+
+        .btn-num:active {
+            transform: scale(0.95);
+        }
+
+        .bg-red { background-color: #dc2626; }
+        .bg-black { background-color: #27272a; }
+        .bg-green { background-color: #16a34a; }
+
+        /* Zone de saisie clavier intégrée */
+        .keyboard-input-box {
+            grid-column: span 1;
+            height: 50px;
+            background-color: #09090b;
+            border: 2px solid #3f3f46;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 5px;
+        }
+
+        .keyboard-input-box input {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-align: center;
+            outline: none;
+        }
+
+        /* Controls */
+        .actions-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-action {
+            height: 45px;
+            border-radius: 6px;
+            border: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-undo { background-color: #2563eb; }
+        .btn-clear { background-color: #dc2626; }
+
+        /* Couleurs texte numéros */
+        .text-red { color: #ef4444; }
+        .text-black { color: #ffffff; }
+        .text-green { color: #22c55e; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Partouche-logo.png" alt="Logo Partouche" class="logo-partouche">
-        <div class="mises-container">
-            <div class="mise-min-max">Mise Min 2€</div>
-            <div class="mise-min-max">Mise Max 40€</div>
-        </div>
-        <div class="table-info">AR 67</div>
+
+    <!-- HISTORIQUE À GAUCHE -->
+    <div class="history-column">
+        <div id="latestNumber" class="latest-number text-green">-</div>
+        <div id="historyList" class="history-list"></div>
     </div>
 
-    <div class="main-container">
-        <div class="input-container">
-            <input type="text" id="resultInput" class="result-input" placeholder="" maxlength="2">
-            <button class="effacer-tout-btn">Effacer Tout</button>
-            <button class="retour-undo-btn">Retour (Undo)</button>
+    <!-- CONTENU PRINCIPAL -->
+    <div class="main-content">
+        
+        <!-- EN-TÊTE -->
+        <div class="header">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/31/Partouche-logo.png" alt="Partouche" class="logo-partouche">
+            <div class="mises-info">
+                <div>Mise Min 2€</div>
+                <div>Mise Max 40€</div>
+            </div>
+            <div class="table-id">AR 67</div>
         </div>
 
-        <div class="numbers-grid">
-            <div class="number-box green">0</div>
-            <div class="number-box red">1</div>
-            <div class="number-box black">2</div>
-            <div class="number-box red">3</div>
-            <div class="number-box black">4</div>
-            <div class="number-box red">5</div>
-            <div class="number-box black">6</div>
-            <div class="number-box red">7</div>
-            <div class="number-box black">8</div>
-            <div class="number-box red">9</div>
-            <div class="number-box black">10</div>
-            <div class="number-box black">11</div>
-            <div class="number-box red">12</div>
-            <div class="number-box black">13</div>
-            <div class="number-box red">14</div>
-            <div class="number-box black">15</div>
-            <div class="number-box red">16</div>
-            <div class="number-box black">17</div>
-            <div class="number-box red">18</div>
-            <div class="number-box red">19</div>
-            <div class="number-box black">20</div>
-            <div class="number-box red">21</div>
-            <div class="number-box black">22</div>
-            <div class="number-box red">23</div>
-            <div class="number-box black">24</div>
-            <div class="number-box red">25</div>
-            <div class="number-box black">26</div>
-            <div class="number-box red">27</div>
-            <div class="number-box black">28</div>
-            <div class="number-box black">29</div>
-            <div class="number-box red">30</div>
-            <div class="number-box black">31</div>
-            <div class="number-box red">32</div>
-            <div class="number-box black">33</div>
-            <div class="number-box red">34</div>
-            <div class="number-box black">35</div>
-            <div class="number-box red">36</div>
+        <!-- DERNIERS NUMÉROS -->
+        <div id="recentBar" class="recent-bar"></div>
+
+        <!-- STATISTIQUES -->
+        <div class="stats-container">
+            <!-- Rouge / Zéro / Noir -->
+            <div class="stat-bar-wrapper">
+                <div id="barRed" class="stat-part stat-red" style="width: 50%;">0%</div>
+                <div id="barGreen" class="stat-part stat-green" style="width: 0%;">0%</div>
+                <div id="barBlack" class="stat-part stat-black" style="width: 50%;">0%</div>
+            </div>
+            <!-- Pair / Impair -->
+            <div class="stat-bar-wrapper">
+                <div id="barEven" class="stat-part stat-even" style="width: 50%;">0%</div>
+                <div id="barOdd" class="stat-part stat-odd" style="width: 50%;">0%</div>
+            </div>
         </div>
+
+        <!-- CHAUDS / FROIDS -->
+        <div class="hot-cold-container">
+            <div class="hot-cold-group">
+                <span class="hot-cold-icon">🔥</span>
+                <div id="hotNumbers" style="display: flex; gap: 6px;"></div>
+            </div>
+            <div class="hot-cold-group" style="margin-left: 20px;">
+                <span class="hot-cold-icon">❄️</span>
+                <div id="coldNumbers" style="display: flex; gap: 6px;"></div>
+            </div>
+        </div>
+
+        <!-- PAVÉ NUMÉRIQUE (0 À 36) + SAISIE CLAVIER -->
+        <div id="gridContainer" class="grid-container"></div>
+
+        <!-- BOUTONS ACTION -->
+        <div class="actions-container">
+            <button class="btn-action btn-undo" onclick="undoLast()">Retour (Undo)</button>
+            <button class="btn-action btn-clear" onclick="clearAll()">Effacer Tout</button>
+        </div>
+
     </div>
 
     <script>
-        const resultInput = document.getElementById('resultInput');
-        const effacerToutBtn = document.querySelector('.effacer-tout-btn');
-        const retourUndoBtn = document.querySelector('.retour-undo-btn');
+        const redNumbers = [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
+        let history = [];
 
-        // Fonction pour gérer la saisie au clavier
-        function handleKeyboardInput(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                const numero = resultInput.value;
-                if (numero !== '') {
-                    // Ici, vous pouvez ajouter votre logique pour traiter le numéro
-                    console.log('Numéro saisi :', numero);
-                    resultInput.value = '';
-                }
+        function getColor(num) {
+            if (num === 0) return 'green';
+            return redNumbers.includes(num) ? 'red' : 'black';
+        }
+
+        function addNumber(num) {
+            if (isNaN(num) || num < 0 || num > 36) return;
+            history.unshift(num);
+            updateUI();
+        }
+
+        function undoLast() {
+            if (history.length > 0) {
+                history.shift();
+                updateUI();
             }
         }
 
-        // Écouter l'événement 'keydown' sur la zone de texte
-        resultInput.addEventListener('keydown', handleKeyboardInput);
+        function clearAll() {
+            history = [];
+            updateUI();
+        }
 
-        // Autres écouteurs d'événements pour les boutons
-        effacerToutBtn.addEventListener('click', () => {
-            // Logique pour effacer tout
-            console.log('Effacer Tout cliqué');
-            resultInput.value = '';
-        });
+        function renderGrid() {
+            const grid = document.getElementById('gridContainer');
+            grid.innerHTML = '';
 
-        retourUndoBtn.addEventListener('click', () => {
-            // Logique pour annuler la dernière action
-            console.log('Retour (Undo) cliqué');
-        });
+            // Boutons 0 à 36
+            for (let i = 0; i <= 36; i++) {
+                const btn = document.createElement('button');
+                btn.className = `btn-num bg-${getColor(i)}`;
+                btn.innerText = i;
+                btn.onclick = () => addNumber(i);
+                grid.appendChild(btn);
+            }
 
-        // Focaliser la zone de texte par défaut pour une saisie immédiate
-        resultInput.focus();
+            // Case pour la saisie clavier (à côté du 36)
+            const inputWrapper = document.createElement('div');
+            inputWrapper.className = 'keyboard-input-box';
+            
+            const input = document.createElement('input');
+            input.type = 'number';
+            input.id = 'directInput';
+            input.placeholder = '⌨️';
+            input.min = 0;
+            input.max = 36;
+
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    const val = parseInt(input.value, 10);
+                    if (!isNaN(val) && val >= 0 && val <= 36) {
+                        addNumber(val);
+                        input.value = '';
+                    }
+                }
+            });
+
+            inputWrapper.appendChild(input);
+            grid.appendChild(inputWrapper);
+        }
+
+        function updateUI() {
+            // Dernier numéro
+            const latestEl = document.getElementById('latestNumber');
+            if (history.length > 0) {
+                const last = history[0];
+                latestEl.innerText = last;
+                latestEl.className = `latest-number text-${getColor(last)}`;
+            } else {
+                latestEl.innerText = '-';
+                latestEl.className = 'latest-number text-green';
+            }
+
+            // Historique vertical (gauche)
+            const historyList = document.getElementById('historyList');
+            historyList.innerHTML = '';
+            history.slice(1).forEach(num => {
+                const item = document.createElement('div');
+                item.className = `history-item text-${getColor(num)}`;
+                item.innerText = num;
+                historyList.appendChild(item);
+            });
+
+            // Barre horizontale récents (haut)
+            const recentBar = document.getElementById('recentBar');
+            recentBar.innerHTML = '';
+            history.slice(0, 5).forEach(num => {
+                const badge = document.createElement('div');
+                badge.className = `recent-badge bg-${getColor(num)}`;
+                badge.innerText = num;
+                recentBar.appendChild(badge);
+            });
+
+            // Calcul des Stats
+            const total = history.length;
+            if (total > 0) {
+                const reds = history.filter(n => getColor(n) === 'red').length;
+                const blacks = history.filter(n => getColor(n) === 'black').length;
+                const greens = history.filter(n => n === 0).length;
+
+                const nonZero = total - greens;
+                const evens = history.filter(n => n !== 0 && n % 2 === 0).length;
+                const odds = history.filter(n => n !== 0 && n % 2 !== 0).length;
+
+                document.getElementById('barRed').style.width = `${(reds / total) * 100}%`;
+                document.getElementById('barRed').innerText = `${Math.round((reds / total) * 100)}%`;
+
+                document.getElementById('barGreen').style.width = `${(greens / total) * 100}%`;
+                document.getElementById('barGreen').innerText = greens > 0 ? `${Math.round((greens / total) * 100)}%` : '';
+
+                document.getElementById('barBlack').style.width = `${(blacks / total) * 100}%`;
+                document.getElementById('barBlack').innerText = `${Math.round((blacks / total) * 100)}%`;
+
+                if (nonZero > 0) {
+                    document.getElementById('barEven').style.width = `${(evens / nonZero) * 100}%`;
+                    document.getElementById('barEven').innerText = `${Math.round((evens / nonZero) * 100)}%`;
+                    document.getElementById('barOdd').style.width = `${(odds / nonZero) * 100}%`;
+                    document.getElementById('barOdd').innerText = `${Math.round((odds / nonZero) * 100)}%`;
+                }
+            }
+
+            // Calcul Chauds / Froids
+            updateHotCold();
+
+            // Refocus sur le champ de saisie
+            const input = document.getElementById('directInput');
+            if (input) input.focus();
+        }
+
+        function updateHotCold() {
+            const counts = {};
+            for (let i = 0; i <= 36; i++) counts[i] = 0;
+            history.forEach(n => counts[n]++);
+
+            const sorted = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+
+            const hotContainer = document.getElementById('hotNumbers');
+            const coldContainer = document.getElementById('coldNumbers');
+
+            hotContainer.innerHTML = '';
+            coldContainer.innerHTML = '';
+
+            sorted.slice(0, 4).forEach(n => {
+                const num = parseInt(n, 10);
+                const badge = document.createElement('div');
+                badge.className = `recent-badge bg-${getColor(num)}`;
+                badge.style.width = '35px';
+                badge.style.height = '35px';
+                badge.style.fontSize = '1rem';
+                badge.innerText = num;
+                hotContainer.appendChild(badge);
+            });
+
+            sorted.slice(-4).reverse().forEach(n => {
+                const num = parseInt(n, 10);
+                const badge = document.createElement('div');
+                badge.className = `recent-badge bg-${getColor(num)}`;
+                badge.style.width = '35px';
+                badge.style.height = '35px';
+                badge.style.fontSize = '1rem';
+                badge.innerText = num;
+                coldContainer.appendChild(badge);
+            });
+        }
+
+        // Initialisation
+        renderGrid();
+        updateUI();
     </script>
 </body>
 </html>
